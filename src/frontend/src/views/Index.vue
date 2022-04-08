@@ -27,27 +27,13 @@
             <div class="sheet">
               <h2 class="title title--small sheet__title">Выберите тесто</h2>
               <div class="sheet__content dough">
-                <label class="dough__input dough__input--light">
-                  <input
-                    type="radio"
-                    name="dought"
-                    value="light"
-                    class="visually-hidden"
-                    checked
-                  />
-                  <b>Тонкое</b>
-                  <span>Из твердых сортов пшеницы</span>
-                </label>
-                <label class="dough__input dough__input--large">
-                  <input
-                    type="radio"
-                    name="dought"
-                    value="large"
-                    class="visually-hidden"
-                  />
-                  <b>Толстое</b>
-                  <span>Из твердых сортов пшеницы</span>
-                </label>
+                <SelectorItem
+                  v-for="item in dough"
+                  :key="item.id"
+                  :item="item"
+                  name="dough"
+                >
+                </SelectorItem>
               </div>
             </div>
           </div>
@@ -56,34 +42,13 @@
               <h2 class="title title--small sheet__title">Выберите размер</h2>
 
               <div class="sheet__content diameter">
-                <label class="diameter__input diameter__input--small">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    value="small"
-                    class="visually-hidden"
-                  />
-                  <span>23 см</span>
-                </label>
-                <label class="diameter__input diameter__input--normal">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    value="normal"
-                    class="visually-hidden"
-                    checked
-                  />
-                  <span>32 см</span>
-                </label>
-                <label class="diameter__input diameter__input--big">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    value="big"
-                    class="visually-hidden"
-                  />
-                  <span>45 см</span>
-                </label>
+                <SelectorItem
+                  v-for="item in sizes"
+                  :key="item.id"
+                  :item="item"
+                  name="diameter"
+                >
+                </SelectorItem>
               </div>
             </div>
           </div>
@@ -98,54 +63,25 @@
                 <div class="ingredients__sauce">
                   <p>Основной соус:</p>
 
-                  <label class="radio ingredients__input">
-                    <input type="radio" name="sauce" value="tomato" checked />
-                    <span>Томатный</span>
-                  </label>
-                  <label class="radio ingredients__input">
-                    <input type="radio" name="sauce" value="creamy" />
-                    <span>Сливочный</span>
-                  </label>
+                  <RadioButton
+                    v-for="item in sauces"
+                    :key="item.id"
+                    :item="item"
+                    name="sauce"
+                  >
+                  </RadioButton>
                 </div>
 
                 <div class="ingredients__filling">
                   <p>Начинка:</p>
 
                   <ul class="ingredients__list">
-                    <li
-                      class="ingredients__item"
+                    <ItemCounter
                       v-for="ingredient in pizza.ingredients"
                       :key="ingredient.id"
+                      :item="ingredient"
                     >
-                      <span
-                        class="filling"
-                        :class="`filling--${ingredient.imageName}`"
-                      >
-                        {{ ingredient.name }}
-                      </span>
-
-                      <div class="counter counter--orange ingredients__counter">
-                        <button
-                          type="button"
-                          class="counter__button counter__button--minus"
-                          disabled
-                        >
-                          <span class="visually-hidden">Меньше</span>
-                        </button>
-                        <input
-                          type="text"
-                          name="counter"
-                          class="counter__input"
-                          value="0"
-                        />
-                        <button
-                          type="button"
-                          class="counter__button counter__button--plus"
-                        >
-                          <span class="visually-hidden">Больше</span>
-                        </button>
-                      </div>
-                    </li>
+                    </ItemCounter>
                   </ul>
                 </div>
               </div>
@@ -188,14 +124,28 @@ import pizza from "../static/pizza";
 import misc from "../static/misc";
 import user from "../static/user";
 import { getIngredient } from "../common/helpers";
+import { dough, sizes, sauces } from "../common/enums";
+import ItemCounter from "../common/components/ItemCounter";
+import SelectorItem from "../common/components/SelectorItem";
+import RadioButton from "../common/components/RadioButton";
 
 export default {
   name: "IndexPage",
+
+  components: {
+    ItemCounter,
+    SelectorItem,
+    RadioButton,
+  },
+
   data() {
     return {
       user,
       pizza: getIngredient(pizza),
       misc,
+      sauces,
+      dough,
+      sizes,
     };
   },
 };
