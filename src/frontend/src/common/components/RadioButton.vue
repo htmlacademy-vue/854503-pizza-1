@@ -5,6 +5,7 @@
       :name="name"
       :value="item.value"
       :checked="item.isChecked"
+      @input="$emit('radioChange', $event.target.value)"
     />
     <span>{{ item.text }}</span>
   </label>

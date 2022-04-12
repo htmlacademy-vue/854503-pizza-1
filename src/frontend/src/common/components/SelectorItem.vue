@@ -5,6 +5,7 @@
       :name="name"
       :value="item.value"
       class="visually-hidden"
+      @input="$emit('selectorChange', $event.target.value)"
     />
     <b v-if="name === 'dough'">{{ item.title }}</b>
     <span v-else>{{ item.title }}</span>

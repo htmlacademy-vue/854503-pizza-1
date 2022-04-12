@@ -1,92 +1,20 @@
 <template>
   <body>
-    <header class="header">
-      <div class="header__logo">
-        <a href="index.html" class="logo">
-          <img
-            src="img/logo.svg"
-            alt="V!U!E! Pizza logo"
-            width="90"
-            height="40"
-          />
-        </a>
-      </div>
-      <div class="header__cart">
-        <a href="cart.html">0 ₽</a>
-      </div>
-      <div class="header__user">
-        <a href="#" class="header__login"><span>Войти</span></a>
-      </div>
-    </header>
-
+    <AppLayout />
     <main class="content">
       <form action="#" method="post">
         <div class="content__wrapper">
           <h1 class="title title--big">Конструктор пиццы</h1>
-          <div class="content__dough">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите тесто</h2>
-              <div class="sheet__content dough">
-                <SelectorItem
-                  v-for="item in dough"
-                  :key="item.id"
-                  :item="item"
-                  name="dough"
-                >
-                </SelectorItem>
-              </div>
-            </div>
-          </div>
-          <div class="content__diameter">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите размер</h2>
+          <BuilderDoughSelector :dough="dough" @doughChange="doughChange" />
 
-              <div class="sheet__content diameter">
-                <SelectorItem
-                  v-for="item in sizes"
-                  :key="item.id"
-                  :item="item"
-                  name="diameter"
-                >
-                </SelectorItem>
-              </div>
-            </div>
-          </div>
+          <BuilderSizeSelector :sizes="sizes" @sizeChange="sizeChange" />
 
-          <div class="content__ingredients">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">
-                Выберите ингредиенты
-              </h2>
-
-              <div class="sheet__content ingredients">
-                <div class="ingredients__sauce">
-                  <p>Основной соус:</p>
-
-                  <RadioButton
-                    v-for="item in sauces"
-                    :key="item.id"
-                    :item="item"
-                    name="sauce"
-                  >
-                  </RadioButton>
-                </div>
-
-                <div class="ingredients__filling">
-                  <p>Начинка:</p>
-
-                  <ul class="ingredients__list">
-                    <ItemCounter
-                      v-for="ingredient in pizza.ingredients"
-                      :key="ingredient.id"
-                      :item="ingredient"
-                    >
-                    </ItemCounter>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+          <BuilderIngredientsSelector
+            :sauces="sauces"
+            :ingredients="pizza.ingredients"
+            @ingredientChange="ingredientChange"
+            @sauceChange="sauceChange"
+          />
 
           <div class="content__pizza">
             <label class="input">
@@ -98,20 +26,9 @@
               />
             </label>
 
-            <div class="content__constructor">
-              <div class="pizza pizza--foundation--big-tomato">
-                <div class="pizza__wrapper">
-                  <div class="pizza__filling pizza__filling--ananas"></div>
-                  <div class="pizza__filling pizza__filling--bacon"></div>
-                  <div class="pizza__filling pizza__filling--cheddar"></div>
-                </div>
-              </div>
-            </div>
+            <BuilderPizzaView />
 
-            <div class="content__result">
-              <p>Итого: 0 ₽</p>
-              <button type="button" class="button" disabled>Готовьте!</button>
-            </div>
+            <BuilderPriceCounter :price="0" />
           </div>
         </div>
       </form>
@@ -125,17 +42,23 @@ import misc from "../static/misc";
 import user from "../static/user";
 import { getIngredient } from "../common/helpers";
 import { dough, sizes, sauces } from "../common/enums";
-import ItemCounter from "../common/components/ItemCounter";
-import SelectorItem from "../common/components/SelectorItem";
-import RadioButton from "../common/components/RadioButton";
+import AppLayout from "../layouts/AppLayout";
+import BuilderDoughSelector from "../modules/builder/components/BuilderDoughSelector";
+import BuilderIngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector";
+import BuilderSizeSelector from "../modules/builder/components/BuilderSizeSelector";
+import BuilderPizzaView from "../modules/builder/components/BuilderPizzaView";
+import BuilderPriceCounter from "../modules/builder/components/BuilderPriceCounter";
 
 export default {
   name: "IndexPage",
 
   components: {
-    ItemCounter,
-    SelectorItem,
-    RadioButton,
+    AppLayout,
+    BuilderDoughSelector,
+    BuilderIngredientsSelector,
+    BuilderSizeSelector,
+    BuilderPizzaView,
+    BuilderPriceCounter,
   },
 
   data() {
@@ -146,7 +69,28 @@ export default {
       sauces,
       dough,
       sizes,
+      customPizza: {
+        size: "",
+        sauce: "",
+        dough: "",
+        ingredient: {},
+      },
     };
+  },
+
+  methods: {
+    ingredientChange({ id, count }) {
+      this.customPizza.ingredient[id] = count;
+    },
+    doughChange(value) {
+      this.customPizza.dough = value;
+    },
+    sauceChange(sauce) {
+      this.customPizza.sauce = sauce;
+    },
+    sizeChange(size) {
+      this.customPizza.size = size;
+    },
   },
 };
 </script>
