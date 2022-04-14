@@ -9,3 +9,26 @@ export const getIngredient = (pizza) => {
 
   return Object.assign(pizza, { ingredients: ingredients });
 };
+
+export const findItem = (array, value) => {
+  return array.find((item) => {
+    if (item.value) {
+      return item.value === value;
+    } else {
+      return item.id === value;
+    }
+  });
+};
+
+export const makeIngredientsList = (ingredients) => {
+  const list = {};
+
+  for (let item of ingredients) {
+    list[item.id] = {
+      count: 2,
+      price: item.price,
+    };
+  }
+
+  return list;
+};

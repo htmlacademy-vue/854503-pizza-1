@@ -8,6 +8,7 @@
           v-for="item in sizes"
           :key="item.id"
           :item="item"
+          :isSelected="selectedSize.value === item.value"
           name="diameter"
           @selectorChange="$emit('sizeChange', $event)"
         />
@@ -25,6 +26,10 @@ export default {
   props: {
     sizes: {
       type: Array,
+      required: true,
+    },
+    selectedSize: {
+      type: Object,
       required: true,
     },
   },

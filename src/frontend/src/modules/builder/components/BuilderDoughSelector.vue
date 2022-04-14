@@ -7,6 +7,7 @@
           v-for="item in dough"
           :key="item.id"
           :item="item"
+          :isSelected="selectedDough.value === item.value"
           name="dough"
           @selectorChange="$emit('doughChange', $event)"
         >
@@ -25,6 +26,10 @@ export default {
   props: {
     dough: {
       type: Array,
+      required: true,
+    },
+    selectedDough: {
+      type: Object,
       required: true,
     },
   },

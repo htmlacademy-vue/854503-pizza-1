@@ -12,6 +12,7 @@
             :key="item.id"
             :item="item"
             name="sauce"
+            :isSelected="selectedSauce.value === item.value"
             @radioChange="$emit('sauceChange', $event)"
           >
           </RadioButton>
@@ -25,6 +26,10 @@
               v-for="ingredient in ingredients"
               :key="ingredient.id"
               :item="ingredient"
+              :isDraggable="
+                customIngredients[ingredient.id].count < MAX_INGREDIENTS
+              "
+              :count="customIngredients[ingredient.id].count"
               @countChange="$emit('ingredientChange', $event)"
             >
             </ItemCounter>
@@ -38,6 +43,7 @@
 <script>
 import RadioButton from "../../../common/components/RadioButton";
 import ItemCounter from "../../../common/components/ItemCounter";
+import { MAX_INGREDIENTS } from "../../../common/const";
 
 export default {
   name: "BuilderIngredientsSelector",
@@ -47,8 +53,16 @@ export default {
       type: Array,
       required: true,
     },
+    selectedSauce: {
+      type: Object,
+      required: true,
+    },
     ingredients: {
       type: Array,
+      required: true,
+    },
+    customIngredients: {
+      type: Object,
       required: true,
     },
   },
@@ -56,6 +70,12 @@ export default {
   components: {
     RadioButton,
     ItemCounter,
+  },
+
+  data() {
+    return {
+      MAX_INGREDIENTS,
+    };
   },
 
   methods: {

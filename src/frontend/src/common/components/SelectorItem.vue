@@ -4,6 +4,7 @@
       type="radio"
       :name="name"
       :value="item.value"
+      :checked="isSelected"
       class="visually-hidden"
       @input="$emit('selectorChange', $event.target.value)"
     />
@@ -25,6 +26,10 @@ export default {
     name: {
       type: String,
       required: true,
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
     },
   },
 };

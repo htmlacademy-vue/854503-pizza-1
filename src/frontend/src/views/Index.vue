@@ -5,14 +5,24 @@
       <form action="#" method="post">
         <div class="content__wrapper">
           <h1 class="title title--big">Конструктор пиццы</h1>
-          <BuilderDoughSelector :dough="dough" @doughChange="doughChange" />
+          <BuilderDoughSelector
+            :dough="dough"
+            :selectedDough="customPizza.dough"
+            @doughChange="doughChange"
+          />
 
-          <BuilderSizeSelector :sizes="sizes" @sizeChange="sizeChange" />
+          <BuilderSizeSelector
+            :sizes="sizes"
+            :selectedSize="customPizza.size"
+            @sizeChange="sizeChange"
+          />
 
           <BuilderIngredientsSelector
             :sauces="sauces"
             :ingredients="pizza.ingredients"
-            @ingredientChange="ingredientChange"
+            :customIngredients="customPizza.ingredients"
+            :selectedSauce="customPizza.sauce"
+            @ingredientChange="ingredientAmountChange"
             @sauceChange="sauceChange"
           />
 
@@ -26,9 +36,9 @@
               />
             </label>
 
-            <BuilderPizzaView />
+            <BuilderPizzaView @addIngredient="addIngredient" />
 
-            <BuilderPriceCounter :price="0" />
+            <BuilderPriceCounter :price="price" />
           </div>
         </div>
       </form>
@@ -40,7 +50,11 @@
 import pizza from "../static/pizza";
 import misc from "../static/misc";
 import user from "../static/user";
-import { getIngredient } from "../common/helpers";
+import {
+  getIngredient,
+  findItem,
+  makeIngredientsList,
+} from "../common/helpers";
 import { dough, sizes, sauces } from "../common/enums";
 import AppLayout from "../layouts/AppLayout";
 import BuilderDoughSelector from "../modules/builder/components/BuilderDoughSelector";
@@ -70,26 +84,83 @@ export default {
       dough,
       sizes,
       customPizza: {
-        size: "",
-        sauce: "",
-        dough: "",
-        ingredient: {},
+        size: {
+          value: "big",
+          multiplier: 3,
+        },
+        sauce: {
+          value: "creamy",
+          price: 50,
+        },
+        dough: {
+          value: "large",
+          price: 300,
+        },
+        ingredients: makeIngredientsList(pizza.ingredients),
       },
     };
   },
 
+  computed: {
+    price() {
+      const saucePrice = this.customPizza.sauce.price;
+      const doughPrice = this.customPizza.dough.price;
+      const ingredients = this.customPizza.ingredients;
+      let currentPrice = saucePrice + doughPrice;
+
+      for (let ingredient in ingredients) {
+        currentPrice +=
+          ingredients[ingredient].price * ingredients[ingredient].count;
+      }
+
+      return currentPrice * this.customPizza.size.multiplier;
+    },
+  },
+
   methods: {
-    ingredientChange({ id, count }) {
-      this.customPizza.ingredient[id] = count;
+    ingredientAmountChange({ id, count }) {
+      const obj = Object.assign({}, this.customPizza.ingredients, {
+        [id]: {
+          count,
+          price: findItem(this.pizza.ingredients, id).price,
+        },
+      });
+
+      this.customPizza.ingredients = obj;
+    },
+    addIngredient({ id }) {
+      let ingredient = this.customPizza.ingredients[id];
+
+      if (ingredient) {
+        ingredient.count = ingredient.count + 1;
+      } else {
+        const obj = Object.assign({}, this.customPizza.ingredients, {
+          [id]: {
+            count: 1,
+            price: findItem(this.pizza.ingredients, id).price,
+          },
+        });
+
+        this.customPizza.ingredients = obj;
+      }
     },
     doughChange(value) {
-      this.customPizza.dough = value;
+      this.customPizza.dough = {
+        value,
+        price: findItem(this.dough, value).price,
+      };
     },
-    sauceChange(sauce) {
-      this.customPizza.sauce = sauce;
+    sauceChange(value) {
+      this.customPizza.sauce = {
+        value,
+        price: findItem(this.sauces, value).price,
+      };
     },
-    sizeChange(size) {
-      this.customPizza.size = size;
+    sizeChange(value) {
+      this.customPizza.size = {
+        value,
+        multiplier: findItem(this.sizes, value).multiplier,
+      };
     },
   },
 };

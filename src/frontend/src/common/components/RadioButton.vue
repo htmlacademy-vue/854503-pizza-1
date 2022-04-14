@@ -4,7 +4,7 @@
       type="radio"
       :name="name"
       :value="item.value"
-      :checked="item.isChecked"
+      :checked="isSelected"
       @input="$emit('radioChange', $event.target.value)"
     />
     <span>{{ item.text }}</span>
@@ -23,6 +23,10 @@ export default {
     name: {
       type: String,
       required: true,
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
     },
   },
 };
