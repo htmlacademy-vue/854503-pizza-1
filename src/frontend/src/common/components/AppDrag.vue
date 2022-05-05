@@ -15,12 +15,6 @@ import { MOVE, DATA_TRANSFER_PAYLOAD } from "../const";
 export default {
   name: "AppDrag",
 
-  // data() {
-  //   return {
-  //     isDraggable: true,
-  //   };
-  // },
-
   props: {
     transferData: {
       type: Object,

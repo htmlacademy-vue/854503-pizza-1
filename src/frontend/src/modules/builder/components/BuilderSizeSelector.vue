@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import SelectorItem from "../../../common/components/SelectorItem";
+import SelectorItem from "@/common/components/SelectorItem";
 
 export default {
   name: "BuilderSizeSelector",

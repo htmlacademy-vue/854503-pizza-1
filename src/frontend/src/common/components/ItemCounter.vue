@@ -6,14 +6,12 @@
           {{ item.name }}
         </span>
 
-        <div
-          class="counter counter--orange ingredients__counter"
-          @click="countChange"
-        >
+        <div class="counter counter--orange ingredients__counter">
           <button
             type="button"
             class="counter__button counter__button--minus"
             :disabled="count === MIN_INGREDIENTS"
+            @click="countDec"
           >
             <span class="visually-hidden">Меньше</span>
           </button>
@@ -28,6 +26,7 @@
             type="button"
             class="counter__button counter__button--plus"
             :disabled="count >= MAX_INGREDIENTS"
+            @click="countInc"
           >
             <span class="visually-hidden">Больше</span>
           </button>
@@ -73,27 +72,23 @@ export default {
   },
 
   methods: {
+    countInc() {
+      this.$emit("countInc", this.count + 1);
+    },
+    countDec() {
+      this.$emit("countDec", this.count - 1);
+    },
     countChange(evt) {
-      let currentCount = this.count;
-      if (evt.target.classList.contains("counter__button--minus")) {
-        --currentCount;
-      } else if (evt.target.classList.contains("counter__input")) {
-        currentCount = Number.parseInt(evt.target.value, 10);
-      } else if (evt.target.classList.contains("counter__button--plus")) {
-        ++currentCount;
-      } else {
-        return;
+      let currentCount = Number.parseInt(evt.target.value, 10);
+
+      if (currentCount < MIN_INGREDIENTS) {
+        currentCount = 0;
+      }
+      if (currentCount > MAX_INGREDIENTS) {
+        currentCount = MAX_INGREDIENTS;
       }
 
-      this.$emit("countChange", { id: this.item.id, count: currentCount });
-
-      // if (this.currentCount === MAX_INGREDIENTS) {
-      //   this.isDraggable = false;
-      //   return;
-      // }
-      // if (this.currentCount < MAX_INGREDIENTS) {
-      //   this.isDraggable = true;
-      // }
+      this.$emit("countChange", currentCount);
     },
   },
 };

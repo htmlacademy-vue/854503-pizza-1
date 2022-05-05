@@ -10,15 +10,14 @@
           :isSelected="selectedDough.value === item.value"
           name="dough"
           @selectorChange="$emit('doughChange', $event)"
-        >
-        </SelectorItem>
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import SelectorItem from "../../../common/components/SelectorItem.vue";
+import SelectorItem from "@/common/components/SelectorItem.vue";
 
 export default {
   name: "BuilderDoughSelector",
@@ -36,12 +35,6 @@ export default {
 
   components: {
     SelectorItem,
-  },
-
-  methods: {
-    doughTypeChange(value) {
-      this.$emit("doughTypeChange", value);
-    },
   },
 };
 </script>

@@ -22,8 +22,10 @@
             :ingredients="pizza.ingredients"
             :customIngredients="customPizza.ingredients"
             :selectedSauce="customPizza.sauce"
-            @ingredientChange="ingredientAmountChange"
             @sauceChange="sauceChange"
+            @ingredientCountChange="ingredientAmountChange"
+            @ingredientAdd="ingredientAmountChange"
+            @ingredientDec="ingredientAmountChange"
           />
 
           <div class="content__pizza">
@@ -52,8 +54,9 @@ import misc from "../static/misc";
 import user from "../static/user";
 import {
   getIngredient,
-  findItem,
+  findItemByValue,
   makeIngredientsList,
+  getDefaultPizza,
 } from "../common/helpers";
 import { dough, sizes, sauces } from "../common/enums";
 import AppLayout from "../layouts/AppLayout";
@@ -83,21 +86,10 @@ export default {
       sauces,
       dough,
       sizes,
-      customPizza: {
-        size: {
-          value: "big",
-          multiplier: 3,
-        },
-        sauce: {
-          value: "creamy",
-          price: 50,
-        },
-        dough: {
-          value: "large",
-          price: 300,
-        },
+      // Дефолтные значения нужно получать из /static/pizza
+      customPizza: Object.assign({}, getDefaultPizza(pizza), {
         ingredients: makeIngredientsList(pizza.ingredients),
-      },
+      }),
     };
   },
 
@@ -110,7 +102,8 @@ export default {
 
       for (let ingredient in ingredients) {
         currentPrice +=
-          ingredients[ingredient].price * ingredients[ingredient].count;
+          this.pizza.ingredients[ingredient - 1].price *
+          ingredients[ingredient];
       }
 
       return currentPrice * this.customPizza.size.multiplier;
@@ -120,46 +113,32 @@ export default {
   methods: {
     ingredientAmountChange({ id, count }) {
       const obj = Object.assign({}, this.customPizza.ingredients, {
-        [id]: {
-          count,
-          price: findItem(this.pizza.ingredients, id).price,
-        },
+        [id]: count,
       });
 
       this.customPizza.ingredients = obj;
     },
     addIngredient({ id }) {
-      let ingredient = this.customPizza.ingredients[id];
+      const ingredient = this.customPizza.ingredients[id];
 
-      if (ingredient) {
-        ingredient.count = ingredient.count + 1;
-      } else {
-        const obj = Object.assign({}, this.customPizza.ingredients, {
-          [id]: {
-            count: 1,
-            price: findItem(this.pizza.ingredients, id).price,
-          },
-        });
-
-        this.customPizza.ingredients = obj;
-      }
+      this.customPizza.ingredients[id] = ingredient + 1;
     },
     doughChange(value) {
       this.customPizza.dough = {
         value,
-        price: findItem(this.dough, value).price,
+        price: findItemByValue(this.dough, value).price,
       };
     },
     sauceChange(value) {
       this.customPizza.sauce = {
         value,
-        price: findItem(this.sauces, value).price,
+        price: findItemByValue(this.sauces, value).price,
       };
     },
     sizeChange(value) {
       this.customPizza.size = {
         value,
-        multiplier: findItem(this.sizes, value).multiplier,
+        multiplier: findItemByValue(this.sizes, value).multiplier,
       };
     },
   },

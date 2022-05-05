@@ -10,7 +10,8 @@
           <RadioButton
             v-for="item in sauces"
             :key="item.id"
-            :item="item"
+            :value="item.value"
+            :text="item.text"
             name="sauce"
             :isSelected="selectedSauce.value === item.value"
             @radioChange="$emit('sauceChange', $event)"
@@ -26,11 +27,20 @@
               v-for="ingredient in ingredients"
               :key="ingredient.id"
               :item="ingredient"
-              :isDraggable="
-                customIngredients[ingredient.id].count < MAX_INGREDIENTS
+              :isDraggable="customIngredients[ingredient.id] < MAX_INGREDIENTS"
+              :count="customIngredients[ingredient.id]"
+              @countInc="
+                $emit('ingredientAdd', { id: ingredient.id, count: $event })
               "
-              :count="customIngredients[ingredient.id].count"
-              @countChange="$emit('ingredientChange', $event)"
+              @countDec="
+                $emit('ingredientDec', { id: ingredient.id, count: $event })
+              "
+              @countChange="
+                $emit('ingredientCountChange', {
+                  id: ingredient.id,
+                  count: $event,
+                })
+              "
             >
             </ItemCounter>
           </ul>
@@ -41,9 +51,9 @@
 </template>
 
 <script>
-import RadioButton from "../../../common/components/RadioButton";
-import ItemCounter from "../../../common/components/ItemCounter";
-import { MAX_INGREDIENTS } from "../../../common/const";
+import RadioButton from "@/common/components/RadioButton";
+import ItemCounter from "@/common/components/ItemCounter";
+import { MAX_INGREDIENTS } from "@/common/const";
 
 export default {
   name: "BuilderIngredientsSelector",

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import AppDrop from "../../../common/components/AppDrop";
+import AppDrop from "@/common/components/AppDrop";
 
 export default {
   name: "BuilderPizzaView",

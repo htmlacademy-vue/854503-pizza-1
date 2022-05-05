@@ -3,11 +3,11 @@
     <input
       type="radio"
       :name="name"
-      :value="item.value"
+      :value="value"
       :checked="isSelected"
       @input="$emit('radioChange', $event.target.value)"
     />
-    <span>{{ item.text }}</span>
+    <span>{{ text }}</span>
   </label>
 </template>
 
@@ -16,8 +16,12 @@ export default {
   name: "RadioButton",
 
   props: {
-    item: {
-      type: Object,
+    value: {
+      type: String,
+      required: true,
+    },
+    text: {
+      type: String,
       required: true,
     },
     name: {
