@@ -2,7 +2,7 @@
   <li class="ingredients__item">
     <AppDrop @drop="$emit('drop', $event)">
       <AppDrag :transferData="item" :isDraggable="isDraggable">
-        <span class="filling" :class="`filling--${item.imageName}`">
+        <span class="filling" :class="`filling--${item.ingredientName}`">
           {{ item.name }}
         </span>
 
@@ -81,7 +81,7 @@ export default {
     countChange(evt) {
       let currentCount = Number.parseInt(evt.target.value, 10);
 
-      if (currentCount < MIN_INGREDIENTS) {
+      if (currentCount < MIN_INGREDIENTS || Number.isNaN(currentCount)) {
         currentCount = 0;
       }
       if (currentCount > MAX_INGREDIENTS) {

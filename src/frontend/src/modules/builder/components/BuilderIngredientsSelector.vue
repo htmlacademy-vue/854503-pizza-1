@@ -27,8 +27,10 @@
               v-for="ingredient in ingredients"
               :key="ingredient.id"
               :item="ingredient"
-              :isDraggable="customIngredients[ingredient.id] < MAX_INGREDIENTS"
-              :count="customIngredients[ingredient.id]"
+              :isDraggable="
+                customIngredients[ingredient.id].count < MAX_INGREDIENTS
+              "
+              :count="customIngredients[ingredient.id].count"
               @countInc="
                 $emit('ingredientAdd', { id: ingredient.id, count: $event })
               "

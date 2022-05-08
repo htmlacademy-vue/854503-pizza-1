@@ -7,7 +7,7 @@
           <h1 class="title title--big">Конструктор пиццы</h1>
           <BuilderDoughSelector
             :dough="dough"
-            :selectedDough="customPizza.dough"
+            :selectedDough="customPizza.dough.value"
             @doughChange="doughChange"
           />
 
@@ -38,7 +38,10 @@
               />
             </label>
 
-            <BuilderPizzaView @addIngredient="addIngredient" />
+            <BuilderPizzaView
+              @addIngredient="addIngredient"
+              :ingredients="this.customPizza.ingredients"
+            />
 
             <BuilderPriceCounter :price="price" />
           </div>
@@ -53,10 +56,11 @@ import pizza from "../static/pizza";
 import misc from "../static/misc";
 import user from "../static/user";
 import {
-  getIngredient,
+  getIngredients,
   findItemByValue,
   makeIngredientsList,
   getDefaultPizza,
+  findItemById,
 } from "../common/helpers";
 import { dough, sizes, sauces } from "../common/enums";
 import AppLayout from "../layouts/AppLayout";
@@ -81,12 +85,17 @@ export default {
   data() {
     return {
       user,
-      pizza: getIngredient(pizza),
+      pricee: this.price,
+      pizza: {
+        dough: pizza.dough,
+        sauces: pizza.sauces,
+        sizes: pizza.sizes,
+        ingredients: getIngredients(pizza),
+      },
       misc,
       sauces,
       dough,
       sizes,
-      // Дефолтные значения нужно получать из /static/pizza
       customPizza: Object.assign({}, getDefaultPizza(pizza), {
         ingredients: makeIngredientsList(pizza.ingredients),
       }),
@@ -101,9 +110,8 @@ export default {
       let currentPrice = saucePrice + doughPrice;
 
       for (let ingredient in ingredients) {
-        currentPrice +=
-          this.pizza.ingredients[ingredient - 1].price *
-          ingredients[ingredient];
+        const item = findItemById(this.pizza.ingredients, ingredient);
+        currentPrice += item.price * ingredients[ingredient].count;
       }
 
       return currentPrice * this.customPizza.size.multiplier;
@@ -112,16 +120,12 @@ export default {
 
   methods: {
     ingredientAmountChange({ id, count }) {
-      const obj = Object.assign({}, this.customPizza.ingredients, {
-        [id]: count,
-      });
-
-      this.customPizza.ingredients = obj;
+      this.customPizza.ingredients[id].count = count;
     },
     addIngredient({ id }) {
-      const ingredient = this.customPizza.ingredients[id];
+      const ingredient = this.customPizza.ingredients[id].count;
 
-      this.customPizza.ingredients[id] = ingredient + 1;
+      this.customPizza.ingredients[id].count = ingredient + 1;
     },
     doughChange(value) {
       this.customPizza.dough = {

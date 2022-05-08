@@ -1,15 +1,24 @@
 import { dough, sizes, sauces } from "../common/enums";
 
-export const getIngredient = (pizza) => {
+export const getIngredients = (pizza) => {
   const ingredients = pizza.ingredients.map((ingredient) => {
-    let item = ingredient.image.split("/");
+    let item = getIngredientName(ingredient);
 
-    item = item[item.length - 1].replace(".svg", "");
-
-    return Object.assign(ingredient, { imageName: item });
+    return Object.assign(ingredient, { ingredientName: item });
   });
 
-  return Object.assign(pizza, { ingredients: ingredients });
+  return ingredients;
+};
+
+export const getIngredientName = (ingredient) => {
+  let ingredientName = ingredient.image.split("/");
+
+  ingredientName = ingredientName[ingredientName.length - 1].replace(
+    ".svg",
+    ""
+  );
+
+  return ingredientName;
 };
 
 export const findItemByValue = (array, value) => {
@@ -20,7 +29,7 @@ export const findItemByValue = (array, value) => {
 
 export const findItemById = (array, id) => {
   return array.find((item) => {
-    return item.id === id;
+    return item.id === Number.parseInt(id, 10);
   });
 };
 
@@ -28,7 +37,10 @@ export const makeIngredientsList = (ingredients) => {
   const list = {};
 
   for (let item of ingredients) {
-    list[item.id] = 0;
+    list[item.id] = {
+      ingredientName: item.ingredientName,
+      count: 0,
+    };
   }
 
   return list;
