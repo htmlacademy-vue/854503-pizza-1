@@ -1,7 +1,14 @@
 <template>
   <div class="content__result">
     <p>Итого: {{ price }} ₽</p>
-    <button type="button" class="button" disabled>Готовьте!</button>
+    <button
+      type="button"
+      class="button"
+      :disabled="isDisabled"
+      @click="$emit('addToCart')"
+    >
+      Готовьте!
+    </button>
   </div>
 </template>
 
@@ -13,6 +20,10 @@ export default {
     price: {
       type: Number,
       default: 0,
+    },
+    isDisabled: {
+      type: Boolean,
+      default: true,
     },
   },
 };

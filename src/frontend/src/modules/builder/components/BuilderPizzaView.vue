@@ -1,7 +1,9 @@
 <template>
   <AppDrop @drop="$emit('addIngredient', $event)">
     <div class="content__constructor">
-      <div class="pizza pizza--foundation--big-tomato">
+      <div
+        :class="`pizza pizza--foundation--${doughToClass.get(dough)}-${souce}`"
+      >
         <div class="pizza__wrapper">
           <div
             v-for="ingredient in addedIngredients.addedOnce"
@@ -29,6 +31,7 @@
 
 <script>
 import AppDrop from "@/common/components/AppDrop";
+import { doughToClass } from "@/common/enums";
 
 export default {
   name: "BuilderPizzaView",
@@ -37,16 +40,30 @@ export default {
     AppDrop,
   },
 
+  data() {
+    return {
+      doughToClass,
+    };
+  },
+
   props: {
     ingredients: {
       type: Object,
+      required: true,
+    },
+    dough: {
+      type: String,
+      required: true,
+    },
+    souce: {
+      type: String,
       required: true,
     },
   },
 
   computed: {
     addedIngredients() {
-      const a = {
+      const sortedIngredient = {
         addedOnce: [],
         addedTwice: [],
         addedThrice: [],
@@ -55,23 +72,35 @@ export default {
       for (let ingredient in this.ingredients) {
         switch (this.ingredients[ingredient].count) {
           case 1: {
-            a.addedOnce.push(this.ingredients[ingredient].ingredientName);
+            sortedIngredient.addedOnce.push(
+              this.ingredients[ingredient].ingredientName
+            );
             break;
           }
           case 2: {
-            a.addedOnce.push(this.ingredients[ingredient].ingredientName);
-            a.addedTwice.push(this.ingredients[ingredient].ingredientName);
+            sortedIngredient.addedOnce.push(
+              this.ingredients[ingredient].ingredientName
+            );
+            sortedIngredient.addedTwice.push(
+              this.ingredients[ingredient].ingredientName
+            );
             break;
           }
           case 3: {
-            a.addedOnce.push(this.ingredients[ingredient].ingredientName);
-            a.addedTwice.push(this.ingredients[ingredient].ingredientName);
-            a.addedThrice.push(this.ingredients[ingredient].ingredientName);
+            sortedIngredient.addedOnce.push(
+              this.ingredients[ingredient].ingredientName
+            );
+            sortedIngredient.addedTwice.push(
+              this.ingredients[ingredient].ingredientName
+            );
+            sortedIngredient.addedThrice.push(
+              this.ingredients[ingredient].ingredientName
+            );
           }
         }
       }
 
-      return a;
+      return sortedIngredient;
     },
   },
 };

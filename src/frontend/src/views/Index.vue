@@ -1,6 +1,6 @@
 <template>
   <body>
-    <AppLayout />
+    <AppLayout :price="cart.price" :pizza="cart.pizza" />
     <main class="content">
       <form action="#" method="post">
         <div class="content__wrapper">
@@ -35,15 +35,22 @@
                 type="text"
                 name="pizza_name"
                 placeholder="Введите название пиццы"
+                @input="customPizza.name = $event.target.value"
               />
             </label>
 
             <BuilderPizzaView
               @addIngredient="addIngredient"
-              :ingredients="this.customPizza.ingredients"
+              :ingredients="customPizza.ingredients"
+              :dough="customPizza.dough.value"
+              :souce="customPizza.sauce.value"
             />
 
-            <BuilderPriceCounter :price="price" />
+            <BuilderPriceCounter
+              :price="price"
+              :isDisabled="isIngredientAdded"
+              @addToCart="addToCart"
+            />
           </div>
         </div>
       </form>
@@ -85,7 +92,6 @@ export default {
   data() {
     return {
       user,
-      pricee: this.price,
       pizza: {
         dough: pizza.dough,
         sauces: pizza.sauces,
@@ -98,7 +104,9 @@ export default {
       sizes,
       customPizza: Object.assign({}, getDefaultPizza(pizza), {
         ingredients: makeIngredientsList(pizza.ingredients),
+        name: "",
       }),
+      cart: {},
     };
   },
 
@@ -115,6 +123,18 @@ export default {
       }
 
       return currentPrice * this.customPizza.size.multiplier;
+    },
+    isIngredientAdded() {
+      const ingredients = this.customPizza.ingredients;
+      let isAnyAdded = true;
+
+      for (let ingredient in ingredients) {
+        if (ingredients[ingredient].count > 0) {
+          isAnyAdded = this.customPizza.name ? false : true;
+          break;
+        }
+      }
+      return isAnyAdded;
     },
   },
 
@@ -143,6 +163,12 @@ export default {
       this.customPizza.size = {
         value,
         multiplier: findItemByValue(this.sizes, value).multiplier,
+      };
+    },
+    addToCart() {
+      this.cart = {
+        pizza: this.customPizza,
+        price: this.price,
       };
     },
   },

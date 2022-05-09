@@ -52,3 +52,8 @@ export const sauces = [
     price: 50,
   },
 ];
+
+export const doughToClass = new Map([
+  ["light", "small"],
+  ["large", "big"],
+]);
