@@ -8,6 +8,7 @@
 import IndexPage from "../src/views/Index";
 export default {
   name: "App",
+
   components: {
     IndexPage,
   },
@@ -17,5 +18,3 @@ export default {
 <style lang="scss">
 @import "~@/assets/scss/app";
 </style>
-
-// make start_project

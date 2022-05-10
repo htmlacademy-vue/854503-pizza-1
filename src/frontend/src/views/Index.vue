@@ -1,156 +1,32 @@
 <template>
   <body>
-    <header class="header">
-      <div class="header__logo">
-        <a href="index.html" class="logo">
-          <img
-            src="img/logo.svg"
-            alt="V!U!E! Pizza logo"
-            width="90"
-            height="40"
-          />
-        </a>
-      </div>
-      <div class="header__cart">
-        <a href="cart.html">0 ₽</a>
-      </div>
-      <div class="header__user">
-        <a href="#" class="header__login"><span>Войти</span></a>
-      </div>
-    </header>
-
+    <AppLayout :price="cart.price" :pizza="cart.pizza" />
     <main class="content">
       <form action="#" method="post">
         <div class="content__wrapper">
           <h1 class="title title--big">Конструктор пиццы</h1>
-          <div class="content__dough">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите тесто</h2>
-              <div class="sheet__content dough">
-                <label class="dough__input dough__input--light">
-                  <input
-                    type="radio"
-                    name="dought"
-                    value="light"
-                    class="visually-hidden"
-                    checked
-                  />
-                  <b>Тонкое</b>
-                  <span>Из твердых сортов пшеницы</span>
-                </label>
-                <label class="dough__input dough__input--large">
-                  <input
-                    type="radio"
-                    name="dought"
-                    value="large"
-                    class="visually-hidden"
-                  />
-                  <b>Толстое</b>
-                  <span>Из твердых сортов пшеницы</span>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="content__diameter">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите размер</h2>
+          <BuilderDoughSelector
+            :dough="pizza.dough"
+            :selectedDough="customPizza.dough.value"
+            @doughChange="doughChange"
+          />
 
-              <div class="sheet__content diameter">
-                <label class="diameter__input diameter__input--small">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    value="small"
-                    class="visually-hidden"
-                  />
-                  <span>23 см</span>
-                </label>
-                <label class="diameter__input diameter__input--normal">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    value="normal"
-                    class="visually-hidden"
-                    checked
-                  />
-                  <span>32 см</span>
-                </label>
-                <label class="diameter__input diameter__input--big">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    value="big"
-                    class="visually-hidden"
-                  />
-                  <span>45 см</span>
-                </label>
-              </div>
-            </div>
-          </div>
+          <BuilderSizeSelector
+            :sizes="pizza.sizes"
+            :selectedSize="customPizza.size"
+            @sizeChange="sizeChange"
+          />
 
-          <div class="content__ingredients">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">
-                Выберите ингредиенты
-              </h2>
-
-              <div class="sheet__content ingredients">
-                <div class="ingredients__sauce">
-                  <p>Основной соус:</p>
-
-                  <label class="radio ingredients__input">
-                    <input type="radio" name="sauce" value="tomato" checked />
-                    <span>Томатный</span>
-                  </label>
-                  <label class="radio ingredients__input">
-                    <input type="radio" name="sauce" value="creamy" />
-                    <span>Сливочный</span>
-                  </label>
-                </div>
-
-                <div class="ingredients__filling">
-                  <p>Начинка:</p>
-
-                  <ul class="ingredients__list">
-                    <li
-                      class="ingredients__item"
-                      v-for="ingredient in pizza.ingredients"
-                      :key="ingredient.id"
-                    >
-                      <span
-                        class="filling"
-                        :class="`filling--${ingredient.imageName}`"
-                      >
-                        {{ ingredient.name }}
-                      </span>
-
-                      <div class="counter counter--orange ingredients__counter">
-                        <button
-                          type="button"
-                          class="counter__button counter__button--minus"
-                          disabled
-                        >
-                          <span class="visually-hidden">Меньше</span>
-                        </button>
-                        <input
-                          type="text"
-                          name="counter"
-                          class="counter__input"
-                          value="0"
-                        />
-                        <button
-                          type="button"
-                          class="counter__button counter__button--plus"
-                        >
-                          <span class="visually-hidden">Больше</span>
-                        </button>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+          <BuilderIngredientsSelector
+            :sauces="pizza.sauces"
+            :ingredients="pizza.ingredients"
+            :customIngredients="customPizza.ingredients"
+            :selectedSauce="customPizza.sauce"
+            @sauceChange="sauceChange"
+            @ingredientCountChange="ingredientAmountChange"
+            @ingredientAdd="ingredientAmountChange"
+            @ingredientDec="ingredientAmountChange"
+          />
 
           <div class="content__pizza">
             <label class="input">
@@ -159,23 +35,22 @@
                 type="text"
                 name="pizza_name"
                 placeholder="Введите название пиццы"
+                @change="customPizza.name = $event.target.value"
               />
             </label>
 
-            <div class="content__constructor">
-              <div class="pizza pizza--foundation--big-tomato">
-                <div class="pizza__wrapper">
-                  <div class="pizza__filling pizza__filling--ananas"></div>
-                  <div class="pizza__filling pizza__filling--bacon"></div>
-                  <div class="pizza__filling pizza__filling--cheddar"></div>
-                </div>
-              </div>
-            </div>
+            <BuilderPizzaView
+              @addIngredient="addIngredient"
+              :ingredients="customPizza.ingredients"
+              :dough="customPizza.dough.value"
+              :souce="customPizza.sauce.value"
+            />
 
-            <div class="content__result">
-              <p>Итого: 0 ₽</p>
-              <button type="button" class="button" disabled>Готовьте!</button>
-            </div>
+            <BuilderPriceCounter
+              :price="price"
+              :isDisabled="isIngredientAdded"
+              @addToCart="addToCart"
+            />
           </div>
         </div>
       </form>
@@ -187,16 +62,110 @@
 import pizza from "../static/pizza";
 import misc from "../static/misc";
 import user from "../static/user";
-import { getIngredient } from "../common/helpers";
+import {
+  getIngredients,
+  makeIngredientsList,
+  getDefaultPizza,
+  findItemById,
+} from "../common/helpers";
+import AppLayout from "../layouts/AppLayout";
+import BuilderDoughSelector from "../modules/builder/components/BuilderDoughSelector";
+import BuilderIngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector";
+import BuilderSizeSelector from "../modules/builder/components/BuilderSizeSelector";
+import BuilderPizzaView from "../modules/builder/components/BuilderPizzaView";
+import BuilderPriceCounter from "../modules/builder/components/BuilderPriceCounter";
 
 export default {
   name: "IndexPage",
+
+  components: {
+    AppLayout,
+    BuilderDoughSelector,
+    BuilderIngredientsSelector,
+    BuilderSizeSelector,
+    BuilderPizzaView,
+    BuilderPriceCounter,
+  },
+
   data() {
     return {
       user,
-      pizza: getIngredient(pizza),
+      pizza: {
+        dough: pizza.dough,
+        sauces: pizza.sauces,
+        sizes: pizza.sizes,
+        ingredients: getIngredients(pizza),
+      },
       misc,
+      customPizza: Object.assign({}, getDefaultPizza(pizza), {
+        ingredients: makeIngredientsList(pizza.ingredients),
+        name: "",
+      }),
+      cart: {},
     };
+  },
+
+  computed: {
+    price() {
+      const saucePrice = this.customPizza.sauce.price;
+      const doughPrice = this.customPizza.dough.price;
+      const ingredients = this.customPizza.ingredients;
+      let currentPrice = saucePrice + doughPrice;
+
+      for (let ingredient in ingredients) {
+        const item = findItemById(this.pizza.ingredients, ingredient);
+        currentPrice += item.price * ingredients[ingredient].count;
+      }
+
+      return currentPrice * this.customPizza.size.multiplier;
+    },
+    isIngredientAdded() {
+      const ingredients = this.customPizza.ingredients;
+      let isAnyAdded = true;
+
+      for (let ingredient in ingredients) {
+        if (ingredients[ingredient].count > 0) {
+          isAnyAdded = this.customPizza.name ? false : true;
+          break;
+        }
+      }
+      return isAnyAdded;
+    },
+  },
+
+  methods: {
+    ingredientAmountChange({ id, count }) {
+      this.customPizza.ingredients[id].count = count;
+    },
+    addIngredient({ id }) {
+      const ingredient = this.customPizza.ingredients[id].count;
+
+      this.customPizza.ingredients[id].count = ingredient + 1;
+    },
+    doughChange({ value, id }) {
+      this.customPizza.dough = {
+        value,
+        price: findItemById(this.pizza.dough, id).price,
+      };
+    },
+    sauceChange({ value, id }) {
+      this.customPizza.sauce = {
+        value,
+        price: findItemById(this.pizza.sauces, id).price,
+      };
+    },
+    sizeChange({ value, id }) {
+      this.customPizza.size = {
+        value,
+        multiplier: findItemById(this.pizza.sizes, id).multiplier,
+      };
+    },
+    addToCart() {
+      this.cart = {
+        pizza: this.customPizza,
+        price: this.price,
+      };
+    },
   },
 };
 </script>
