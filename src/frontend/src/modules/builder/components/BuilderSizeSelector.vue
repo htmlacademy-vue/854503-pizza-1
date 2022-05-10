@@ -8,9 +8,10 @@
           v-for="item in sizes"
           :key="item.id"
           :item="item"
-          :isSelected="selectedSize.value === item.value"
+          :value="sizeNameToValue.get(item.name)"
+          :isSelected="selectedSize.value === sizeNameToValue.get(item.name)"
           name="diameter"
-          @selectorChange="$emit('sizeChange', $event)"
+          @selectorChange="$emit('sizeChange', { value: $event, id: item.id })"
         />
       </div>
     </div>
@@ -19,6 +20,7 @@
 
 <script>
 import SelectorItem from "@/common/components/SelectorItem";
+import { sizeNameToValue } from "@/common/enums";
 
 export default {
   name: "BuilderSizeSelector",
@@ -32,6 +34,12 @@ export default {
       type: Object,
       required: true,
     },
+  },
+
+  data() {
+    return {
+      sizeNameToValue,
+    };
   },
 
   components: {

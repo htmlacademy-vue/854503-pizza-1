@@ -1,16 +1,16 @@
 <template>
-  <label :class="`${name}__input ${name}__input--${item.value}`">
+  <label :class="`${name}__input ${name}__input--${value}`">
     <input
       type="radio"
       :name="name"
-      :value="item.value"
+      :value="value"
       :checked="isSelected"
       class="visually-hidden"
       @input="$emit('selectorChange', $event.target.value)"
     />
-    <b v-if="name === 'dough'">{{ item.title }}</b>
-    <span v-else>{{ item.title }}</span>
-    <span v-if="item.text">{{ item.text }}</span>
+    <b v-if="name === 'dough'">{{ item.name }}</b>
+    <span v-else>{{ item.name }}</span>
+    <span v-if="item.description">{{ item.description }}</span>
   </label>
 </template>
 
@@ -30,6 +30,10 @@ export default {
     isSelected: {
       type: Boolean,
       default: false,
+    },
+    value: {
+      type: String,
+      required: true,
     },
   },
 };

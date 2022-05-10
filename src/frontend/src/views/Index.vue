@@ -6,19 +6,19 @@
         <div class="content__wrapper">
           <h1 class="title title--big">Конструктор пиццы</h1>
           <BuilderDoughSelector
-            :dough="dough"
+            :dough="pizza.dough"
             :selectedDough="customPizza.dough.value"
             @doughChange="doughChange"
           />
 
           <BuilderSizeSelector
-            :sizes="sizes"
+            :sizes="pizza.sizes"
             :selectedSize="customPizza.size"
             @sizeChange="sizeChange"
           />
 
           <BuilderIngredientsSelector
-            :sauces="sauces"
+            :sauces="pizza.sauces"
             :ingredients="pizza.ingredients"
             :customIngredients="customPizza.ingredients"
             :selectedSauce="customPizza.sauce"
@@ -35,7 +35,7 @@
                 type="text"
                 name="pizza_name"
                 placeholder="Введите название пиццы"
-                @input="customPizza.name = $event.target.value"
+                @change="customPizza.name = $event.target.value"
               />
             </label>
 
@@ -64,12 +64,10 @@ import misc from "../static/misc";
 import user from "../static/user";
 import {
   getIngredients,
-  findItemByValue,
   makeIngredientsList,
   getDefaultPizza,
   findItemById,
 } from "../common/helpers";
-import { dough, sizes, sauces } from "../common/enums";
 import AppLayout from "../layouts/AppLayout";
 import BuilderDoughSelector from "../modules/builder/components/BuilderDoughSelector";
 import BuilderIngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector";
@@ -99,9 +97,6 @@ export default {
         ingredients: getIngredients(pizza),
       },
       misc,
-      sauces,
-      dough,
-      sizes,
       customPizza: Object.assign({}, getDefaultPizza(pizza), {
         ingredients: makeIngredientsList(pizza.ingredients),
         name: "",
@@ -147,22 +142,22 @@ export default {
 
       this.customPizza.ingredients[id].count = ingredient + 1;
     },
-    doughChange(value) {
+    doughChange({ value, id }) {
       this.customPizza.dough = {
         value,
-        price: findItemByValue(this.dough, value).price,
+        price: findItemById(this.pizza.dough, id).price,
       };
     },
-    sauceChange(value) {
+    sauceChange({ value, id }) {
       this.customPizza.sauce = {
         value,
-        price: findItemByValue(this.sauces, value).price,
+        price: findItemById(this.pizza.sauces, id).price,
       };
     },
-    sizeChange(value) {
+    sizeChange({ value, id }) {
       this.customPizza.size = {
         value,
-        multiplier: findItemByValue(this.sizes, value).multiplier,
+        multiplier: findItemById(this.pizza.sizes, id).multiplier,
       };
     },
     addToCart() {

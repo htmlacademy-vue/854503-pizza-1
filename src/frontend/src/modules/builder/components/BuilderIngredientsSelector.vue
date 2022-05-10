@@ -10,11 +10,13 @@
           <RadioButton
             v-for="item in sauces"
             :key="item.id"
-            :value="item.value"
-            :text="item.text"
+            :value="sauceNameToValue.get(item.name)"
+            :text="item.name"
             name="sauce"
-            :isSelected="selectedSauce.value === item.value"
-            @radioChange="$emit('sauceChange', $event)"
+            :isSelected="
+              selectedSauce.value === sauceNameToValue.get(item.name)
+            "
+            @radioChange="$emit('sauceChange', { value: $event, id: item.id })"
           >
           </RadioButton>
         </div>
@@ -56,6 +58,7 @@
 import RadioButton from "@/common/components/RadioButton";
 import ItemCounter from "@/common/components/ItemCounter";
 import { MAX_INGREDIENTS } from "@/common/const";
+import { sauceNameToValue } from "@/common/enums";
 
 export default {
   name: "BuilderIngredientsSelector",
@@ -87,6 +90,7 @@ export default {
   data() {
     return {
       MAX_INGREDIENTS,
+      sauceNameToValue,
     };
   },
 

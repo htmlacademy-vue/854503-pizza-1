@@ -7,9 +7,10 @@
           v-for="item in dough"
           :key="item.id"
           :item="item"
-          :isSelected="selectedDough === item.value"
+          :value="doughNameToValue.get(item.name)"
+          :isSelected="selectedDough === doughNameToValue.get(item.name)"
           name="dough"
-          @selectorChange="$emit('doughChange', $event)"
+          @selectorChange="$emit('doughChange', { value: $event, id: item.id })"
         />
       </div>
     </div>
@@ -18,9 +19,16 @@
 
 <script>
 import SelectorItem from "@/common/components/SelectorItem.vue";
+import { doughNameToValue } from "@/common/enums";
 
 export default {
   name: "BuilderDoughSelector",
+
+  data() {
+    return {
+      doughNameToValue,
+    };
+  },
 
   props: {
     dough: {
