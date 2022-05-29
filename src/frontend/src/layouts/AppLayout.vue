@@ -1,40 +1,24 @@
 <template>
-  <header class="header">
-    <div class="header__logo">
-      <a href="index.html" class="logo">
-        <img
-          src="img/logo.svg"
-          alt="V!U!E! Pizza logo"
-          width="90"
-          height="40"
-        />
-      </a>
-    </div>
-    <div class="header__cart">
-      <a href="cart.html">{{ price }} ₽</a>
-    </div>
-    <div class="header__user">
-      <a href="#" class="header__login"><span>Войти</span></a>
-    </div>
-  </header>
+  <div class="app-layout">
+    <EventListener @add-to-cart="$emit('add-to-cart', $event)">
+      <slot></slot>
+    </EventListener>
+  </div>
 </template>
 
 <script>
+import EventListener from "../common/components/EventListener.vue";
+
 export default {
   name: "AppLayout",
 
-  props: {
-    price: {
-      type: Number,
-      default: 0,
-    },
-    pizza: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
-  },
+  components: { EventListener },
 };
 </script>
-<style lang="scss" scoped></style>
+
+<style lang="scss" scoped>
+@import "~@/assets/scss/mixins/page-layout";
+.app-layout {
+  @include page-layout;
+}
+</style>

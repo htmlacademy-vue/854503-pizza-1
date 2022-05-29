@@ -1,61 +1,59 @@
 <template>
-  <body>
-    <AppLayout :price="cart.price" :pizza="cart.pizza" />
-    <main class="content">
-      <form action="#" method="post">
-        <div class="content__wrapper">
-          <h1 class="title title--big">Конструктор пиццы</h1>
-          <BuilderDoughSelector
-            :dough="pizza.dough"
-            :selectedDough="customPizza.dough.value"
-            @doughChange="doughChange"
-          />
+  <main class="content">
+    <form action="#" method="post">
+      <div class="content__wrapper">
+        <h1 class="title title--big">Конструктор пиццы</h1>
+        <BuilderDoughSelector
+          :dough="pizza.dough"
+          :selectedDough="customPizza.dough.value"
+          @doughChange="doughChange"
+        />
 
-          <BuilderSizeSelector
-            :sizes="pizza.sizes"
-            :selectedSize="customPizza.size"
-            @sizeChange="sizeChange"
-          />
+        <BuilderSizeSelector
+          :sizes="pizza.sizes"
+          :selectedSize="customPizza.size"
+          @sizeChange="sizeChange"
+        />
 
-          <BuilderIngredientsSelector
-            :sauces="pizza.sauces"
-            :ingredients="pizza.ingredients"
-            :customIngredients="customPizza.ingredients"
-            :selectedSauce="customPizza.sauce"
-            @sauceChange="sauceChange"
-            @ingredientCountChange="ingredientAmountChange"
-            @ingredientAdd="ingredientAmountChange"
-            @ingredientDec="ingredientAmountChange"
-          />
+        <BuilderIngredientsSelector
+          :sauces="pizza.sauces"
+          :ingredients="pizza.ingredients"
+          :customIngredients="customPizza.ingredients"
+          :selectedSauce="customPizza.sauce"
+          @sauceChange="sauceChange"
+          @ingredientCountChange="ingredientAmountChange"
+          @ingredientAdd="ingredientAmountChange"
+          @ingredientDec="ingredientAmountChange"
+        />
 
-          <div class="content__pizza">
-            <label class="input">
-              <span class="visually-hidden">Название пиццы</span>
-              <input
-                type="text"
-                name="pizza_name"
-                placeholder="Введите название пиццы"
-                @change="customPizza.name = $event.target.value"
-              />
-            </label>
-
-            <BuilderPizzaView
-              @addIngredient="addIngredient"
-              :ingredients="customPizza.ingredients"
-              :dough="customPizza.dough.value"
-              :souce="customPizza.sauce.value"
+        <div class="content__pizza">
+          <label class="input">
+            <span class="visually-hidden">Название пиццы</span>
+            <input
+              type="text"
+              name="pizza_name"
+              placeholder="Введите название пиццы"
+              @change="customPizza.name = $event.target.value"
             />
+          </label>
 
-            <BuilderPriceCounter
-              :price="price"
-              :isDisabled="isIngredientAdded"
-              @addToCart="addToCart"
-            />
-          </div>
+          <BuilderPizzaView
+            @addIngredient="addIngredient"
+            :ingredients="customPizza.ingredients"
+            :dough="customPizza.dough.value"
+            :souce="customPizza.sauce.value"
+          />
+
+          <BuilderPriceCounter
+            :price="price"
+            :isDisabled="isIngredientAdded"
+            @addToCart="addToCart"
+          />
         </div>
-      </form>
-    </main>
-  </body>
+      </div>
+    </form>
+    <router-view @log-in="$emit('log-in', $event)"></router-view>
+  </main>
 </template>
 
 <script>
@@ -68,7 +66,6 @@ import {
   getDefaultPizza,
   findItemById,
 } from "../common/helpers";
-import AppLayout from "../layouts/AppLayout";
 import BuilderDoughSelector from "../modules/builder/components/BuilderDoughSelector";
 import BuilderIngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector";
 import BuilderSizeSelector from "../modules/builder/components/BuilderSizeSelector";
@@ -76,10 +73,9 @@ import BuilderPizzaView from "../modules/builder/components/BuilderPizzaView";
 import BuilderPriceCounter from "../modules/builder/components/BuilderPriceCounter";
 
 export default {
-  name: "IndexPage",
+  name: "Index",
 
   components: {
-    AppLayout,
     BuilderDoughSelector,
     BuilderIngredientsSelector,
     BuilderSizeSelector,
@@ -134,6 +130,9 @@ export default {
   },
 
   methods: {
+    kekw(evt) {
+      console.log(evt);
+    },
     ingredientAmountChange({ id, count }) {
       this.customPizza.ingredients[id].count = count;
     },
@@ -165,6 +164,7 @@ export default {
         pizza: this.customPizza,
         price: this.price,
       };
+      this.$parent.$emit("add-to-cart", this.cart);
     },
   },
 };

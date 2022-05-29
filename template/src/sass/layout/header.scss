@@ -118,6 +118,9 @@
     background: url(../img/login.svg) no-repeat center;
     background-size: auto 50%;
   }
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 
