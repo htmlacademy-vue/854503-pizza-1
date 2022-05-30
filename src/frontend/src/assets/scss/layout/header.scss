@@ -38,21 +38,30 @@
     background-position: 20px center;
     background-size: 29px 27px;
 
-    &:hover:not(:active) {
-      background-color: $green-400;
+    &:not(.disabled) {
+      &:hover:not(:active) {
+        background-color: $green-400;
+      }
+
+      &:active {
+        background-color: $green-600;
+      }
+
+      &:focus {
+        opacity: 0.5;
+      }
     }
 
-    &:active {
-      background-color: $green-600;
-    }
-
-    &:focus {
-      opacity: 0.5;
+    &.disabled {
+      cursor: default;
     }
   }
 }
 
 .header__user {
+  display: flex;
+  align-items: center;
+
   a {
     display: block;
 
