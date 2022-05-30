@@ -1,6 +1,6 @@
 export const routes = [
   {
-    path: "/index",
+    path: "/",
     name: "Index",
     component: () => import("../views/Index"),
     children: [

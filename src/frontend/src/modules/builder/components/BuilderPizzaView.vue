@@ -6,22 +6,14 @@
       >
         <div class="pizza__wrapper">
           <div
-            v-for="ingredient in addedIngredients.addedOnce"
-            :key="`${ingredient}-once`"
+            v-for="ingredient in addedIngredients"
+            :key="ingredient.ingredientName + ingredient.count"
             class="pizza__filling"
-            :class="`pizza__filling--${ingredient}`"
-          ></div>
-          <div
-            v-for="ingredient in addedIngredients.addedTwice"
-            :key="`${ingredient}-twice`"
-            class="pizza__filling"
-            :class="`pizza__filling--${ingredient} pizza__filling--second`"
-          ></div>
-          <div
-            v-for="ingredient in addedIngredients.addedThrice"
-            :key="`${ingredient}-thrice`"
-            class="pizza__filling"
-            :class="`pizza__filling--${ingredient} pizza__filling--third`"
+            :class="[
+              `pizza__filling--${ingredient.ingredientName}`,
+              { 'pizza__filling--second': ingredient.count === 2 },
+              { 'pizza__filling--third': ingredient.count === 3 },
+            ]"
           ></div>
         </div>
       </div>
@@ -63,44 +55,18 @@ export default {
 
   computed: {
     addedIngredients() {
-      const sortedIngredient = {
-        addedOnce: [],
-        addedTwice: [],
-        addedThrice: [],
-      };
+      let ingredientsList = [];
 
-      for (let ingredient in this.ingredients) {
-        switch (this.ingredients[ingredient].count) {
-          case 1: {
-            sortedIngredient.addedOnce.push(
-              this.ingredients[ingredient].ingredientName
-            );
-            break;
-          }
-          case 2: {
-            sortedIngredient.addedOnce.push(
-              this.ingredients[ingredient].ingredientName
-            );
-            sortedIngredient.addedTwice.push(
-              this.ingredients[ingredient].ingredientName
-            );
-            break;
-          }
-          case 3: {
-            sortedIngredient.addedOnce.push(
-              this.ingredients[ingredient].ingredientName
-            );
-            sortedIngredient.addedTwice.push(
-              this.ingredients[ingredient].ingredientName
-            );
-            sortedIngredient.addedThrice.push(
-              this.ingredients[ingredient].ingredientName
-            );
-          }
+      for (let a in this.ingredients) {
+        const currentIngredient = this.ingredients[a];
+
+        for (let index = 1; index <= currentIngredient.count; index++) {
+          let cloneIngredient = Object.assign({}, currentIngredient);
+          cloneIngredient.count = index;
+          ingredientsList.push(cloneIngredient);
         }
       }
-
-      return sortedIngredient;
+      return ingredientsList;
     },
   },
 };

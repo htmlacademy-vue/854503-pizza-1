@@ -52,7 +52,7 @@
         </div>
       </div>
     </form>
-    <router-view @log-in="$emit('log-in', $event)"></router-view>
+    <router-view @log-in="$emit('log-in', $event)" />
   </main>
 </template>
 

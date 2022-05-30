@@ -43,8 +43,8 @@ export default {
       require: true,
     },
     isRequired: {
-      type: String,
-      default: "false",
+      type: Boolean,
+      default: false,
     },
   },
 };

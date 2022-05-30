@@ -11,7 +11,7 @@
             type="button"
             class="counter__button counter__button--minus"
             :disabled="count === MIN_INGREDIENTS"
-            @click="countDec"
+            @click="countChange(count - 1)"
           >
             <span class="visually-hidden">Меньше</span>
           </button>
@@ -20,13 +20,13 @@
             name="counter"
             class="counter__input"
             :value="count"
-            @change="countChange"
+            @change="countChange($event.target.value)"
           />
           <button
             type="button"
             class="counter__button counter__button--plus"
             :disabled="count >= MAX_INGREDIENTS"
-            @click="countInc"
+            @click="countChange(count + 1)"
           >
             <span class="visually-hidden">Больше</span>
           </button>
@@ -72,14 +72,8 @@ export default {
   },
 
   methods: {
-    countInc() {
-      this.$emit("countInc", this.count + 1);
-    },
-    countDec() {
-      this.$emit("countDec", this.count - 1);
-    },
-    countChange(evt) {
-      let currentCount = Number.parseInt(evt.target.value, 10);
+    countChange(value) {
+      let currentCount = Number.parseInt(value, 10);
 
       if (currentCount < MIN_INGREDIENTS || Number.isNaN(currentCount)) {
         currentCount = 0;

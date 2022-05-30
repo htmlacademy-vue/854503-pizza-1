@@ -1,7 +1,7 @@
 <template>
   <div class="app-layout">
     <EventListener @add-to-cart="$emit('add-to-cart', $event)">
-      <slot></slot>
+      <slot />
     </EventListener>
   </div>
 </template>

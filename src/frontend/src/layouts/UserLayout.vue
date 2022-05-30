@@ -2,7 +2,7 @@
   <div class="user-layout">
     <main class="layout">
       <div class="layout__sidebar sidebar">
-        <router-link to="/index" class="logo layout__logo">
+        <router-link to="/" class="logo layout__logo">
           <img
             src="img/logo.svg"
             alt="V!U!E! Pizza logo"
@@ -25,7 +25,7 @@
         >
       </div>
       <EventListener @add-to-cart="$emit('add-to-cart', $event)">
-        <slot></slot>
+        <slot />
       </EventListener>
     </main>
   </div>

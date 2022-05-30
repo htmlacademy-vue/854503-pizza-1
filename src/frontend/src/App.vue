@@ -9,7 +9,7 @@
       "
       :userData="userData"
     >
-      <router-view @log-in="userData = $event"></router-view>
+      <router-view @log-in="userData = $event" />
     </component>
   </div>
 </template>
@@ -39,9 +39,6 @@ export default {
   computed: {
     layout() {
       return this.$route.meta.layout || DEFAULT_LAYOUT;
-    },
-    isSuccess() {
-      return false;
     },
   },
 };

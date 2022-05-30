@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header__logo">
-      <router-link to="/index" class="logo">
+      <router-link to="/" class="logo">
         <img
           src="img/logo.svg"
           alt="V!U!E! Pizza logo"
@@ -11,9 +11,7 @@
       </router-link>
     </div>
     <div class="header__cart">
-      <router-link
-        to="/cart"
-        :class="{ disabled: this.$route.path === '/cart' }"
+      <router-link to="/cart" :class="{ disabled: $route.name === 'Cart' }"
         >{{ price }} ₽</router-link
       >
     </div>
@@ -38,7 +36,9 @@
     </div>
 
     <div v-else class="header__user">
-      <router-link :to="`${$route.path}/login`" class="header__login"
+      <router-link
+        :to="$route.name === 'Index' ? 'login' : `${$route.path}/login`"
+        class="header__login"
         ><span>Войти</span></router-link
       >
     </div>

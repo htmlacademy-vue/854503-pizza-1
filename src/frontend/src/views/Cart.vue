@@ -275,7 +275,7 @@
           </div>
         </div>
       </div>
-      <router-view @log-in="$emit('log-in', $event)"></router-view>
+      <router-view @log-in="$emit('log-in', $event)" />
     </main>
     <section class="footer">
       <div class="footer__more">
