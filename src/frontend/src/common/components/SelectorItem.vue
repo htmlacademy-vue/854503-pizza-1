@@ -6,7 +6,7 @@
       :value="value"
       :checked="isSelected"
       class="visually-hidden"
-      @input="$emit('selectorChange', $event.target.value)"
+      @input="selectorChange"
     />
     <b v-if="name === 'dough'">{{ item.name }}</b>
     <span v-else>{{ item.name }}</span>
@@ -34,6 +34,19 @@ export default {
     value: {
       type: String,
       required: true,
+    },
+    storeAction: {
+      type: String,
+      required: true,
+    },
+  },
+
+  methods: {
+    selectorChange(evt) {
+      this.$store.dispatch(this.storeAction, {
+        id: this.item.id,
+        value: evt.target.value,
+      });
     },
   },
 };

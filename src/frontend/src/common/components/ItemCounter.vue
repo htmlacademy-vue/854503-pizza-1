@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { MAX_INGREDIENTS, MIN_INGREDIENTS } from "../const";
 import AppDrag from "./AppDrag";
 import AppDrop from "./AppDrop";
@@ -54,16 +55,11 @@ export default {
       type: Object,
       required: true,
     },
-    count: {
-      type: Number,
-      required: true,
-    },
     isDraggable: {
       type: Boolean,
       required: true,
     },
   },
-
   data() {
     return {
       MAX_INGREDIENTS,
@@ -71,18 +67,20 @@ export default {
     };
   },
 
+  computed: {
+    ...mapGetters("Builder", ["getIngredientCount"]),
+
+    count() {
+      return this.getIngredientCount(this.item.id);
+    },
+  },
+
   methods: {
     countChange(value) {
-      let currentCount = Number.parseInt(value, 10);
-
-      if (currentCount < MIN_INGREDIENTS || Number.isNaN(currentCount)) {
-        currentCount = 0;
-      }
-      if (currentCount > MAX_INGREDIENTS) {
-        currentCount = MAX_INGREDIENTS;
-      }
-
-      this.$emit("countChange", currentCount);
+      this.$store.dispatch("Builder/changeIngredientAmount", {
+        id: this.item.id,
+        count: value,
+      });
     },
   },
 };

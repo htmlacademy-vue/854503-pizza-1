@@ -3,28 +3,11 @@
     <form action="#" method="post">
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
-        <BuilderDoughSelector
-          :dough="pizza.dough"
-          :selectedDough="customPizza.dough.value"
-          @doughChange="doughChange"
-        />
+        <BuilderDoughSelector />
 
-        <BuilderSizeSelector
-          :sizes="pizza.sizes"
-          :selectedSize="customPizza.size"
-          @sizeChange="sizeChange"
-        />
+        <BuilderSizeSelector :selectedSize="foundation.size" />
 
-        <BuilderIngredientsSelector
-          :sauces="pizza.sauces"
-          :ingredients="pizza.ingredients"
-          :customIngredients="customPizza.ingredients"
-          :selectedSauce="customPizza.sauce"
-          @sauceChange="sauceChange"
-          @ingredientCountChange="ingredientAmountChange"
-          @ingredientAdd="ingredientAmountChange"
-          @ingredientDec="ingredientAmountChange"
-        />
+        <BuilderIngredientsSelector :customIngredients="ingredients" />
 
         <div class="content__pizza">
           <label class="input">
@@ -33,22 +16,18 @@
               type="text"
               name="pizza_name"
               placeholder="Введите название пиццы"
-              @change="customPizza.name = $event.target.value"
+              @input="changePizzaName"
             />
           </label>
 
           <BuilderPizzaView
             @addIngredient="addIngredient"
-            :ingredients="customPizza.ingredients"
-            :dough="customPizza.dough.value"
-            :souce="customPizza.sauce.value"
+            :ingredients="ingredients"
+            :dough="foundation.dough.value"
+            :souce="foundation.sauce.value"
           />
 
-          <BuilderPriceCounter
-            :price="price"
-            :isDisabled="isIngredientAdded"
-            @addToCart="addToCart"
-          />
+          <BuilderPriceCounter />
         </div>
       </div>
     </form>
@@ -57,20 +36,12 @@
 </template>
 
 <script>
-import pizza from "../static/pizza";
-import misc from "../static/misc";
-import user from "../static/user";
-import {
-  getIngredients,
-  makeIngredientsList,
-  getDefaultPizza,
-  findItemById,
-} from "../common/helpers";
 import BuilderDoughSelector from "../modules/builder/components/BuilderDoughSelector";
 import BuilderIngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector";
 import BuilderSizeSelector from "../modules/builder/components/BuilderSizeSelector";
 import BuilderPizzaView from "../modules/builder/components/BuilderPizzaView";
 import BuilderPriceCounter from "../modules/builder/components/BuilderPriceCounter";
+import { mapState } from "vuex";
 
 export default {
   name: "Index",
@@ -83,88 +54,19 @@ export default {
     BuilderPriceCounter,
   },
 
-  data() {
-    return {
-      user,
-      pizza: {
-        dough: pizza.dough,
-        sauces: pizza.sauces,
-        sizes: pizza.sizes,
-        ingredients: getIngredients(pizza),
-      },
-      misc,
-      customPizza: Object.assign({}, getDefaultPizza(pizza), {
-        ingredients: makeIngredientsList(pizza.ingredients),
-        name: "",
-      }),
-      cart: {},
-    };
-  },
-
   computed: {
-    price() {
-      const saucePrice = this.customPizza.sauce.price;
-      const doughPrice = this.customPizza.dough.price;
-      const ingredients = this.customPizza.ingredients;
-      let currentPrice = saucePrice + doughPrice;
-
-      for (let ingredient in ingredients) {
-        const item = findItemById(this.pizza.ingredients, ingredient);
-        currentPrice += item.price * ingredients[ingredient].count;
-      }
-
-      return currentPrice * this.customPizza.size.multiplier;
-    },
-    isIngredientAdded() {
-      const ingredients = this.customPizza.ingredients;
-      let isAnyAdded = true;
-
-      for (let ingredient in ingredients) {
-        if (ingredients[ingredient].count > 0) {
-          isAnyAdded = this.customPizza.name ? false : true;
-          break;
-        }
-      }
-      return isAnyAdded;
-    },
+    ...mapState("Builder", ["foundation", "ingredients", "name", "price"]),
   },
 
   methods: {
-    kekw(evt) {
-      console.log(evt);
+    changePizzaName(evt) {
+      this.$store.dispatch("Builder/changeName", evt.target.value);
     },
-    ingredientAmountChange({ id, count }) {
-      this.customPizza.ingredients[id].count = count;
-    },
+
     addIngredient({ id }) {
       const ingredient = this.customPizza.ingredients[id].count;
 
       this.customPizza.ingredients[id].count = ingredient + 1;
-    },
-    doughChange({ value, id }) {
-      this.customPizza.dough = {
-        value,
-        price: findItemById(this.pizza.dough, id).price,
-      };
-    },
-    sauceChange({ value, id }) {
-      this.customPizza.sauce = {
-        value,
-        price: findItemById(this.pizza.sauces, id).price,
-      };
-    },
-    sizeChange({ value, id }) {
-      this.customPizza.size = {
-        value,
-        multiplier: findItemById(this.pizza.sizes, id).multiplier,
-      };
-    },
-    addToCart() {
-      this.cart = {
-        pizza: this.customPizza,
-        price: this.price,
-      };
-      this.$parent.$emit("add-to-cart", this.cart);
     },
   },
 };

@@ -5,7 +5,7 @@
       :name="name"
       :value="value"
       :checked="isSelected"
-      @input="$emit('radioChange', $event.target.value)"
+      @input="radioChange"
     />
     <span>{{ text }}</span>
   </label>
@@ -31,6 +31,23 @@ export default {
     isSelected: {
       type: Boolean,
       default: false,
+    },
+    storeAction: {
+      type: String,
+      required: true,
+    },
+    id: {
+      type: Number,
+      required: true,
+    },
+  },
+
+  methods: {
+    radioChange(evt) {
+      this.$store.dispatch(this.storeAction, {
+        id: this.id,
+        value: evt.target.value,
+      });
     },
   },
 };

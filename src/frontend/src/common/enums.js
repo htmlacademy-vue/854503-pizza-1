@@ -18,3 +18,10 @@ export const sizeNameToValue = new Map([
   ["32 см", "normal"],
   ["45 см", "big"],
 ]);
+
+export const notificationTypes = {
+  INFO: "info",
+  SUCCESS: "success",
+  ERROR: "error",
+  WARNING: "warning",
+};

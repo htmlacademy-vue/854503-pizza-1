@@ -1,24 +1,45 @@
 <template>
   <div class="app-layout">
-    <EventListener @add-to-cart="$emit('add-to-cart', $event)">
-      <slot />
-    </EventListener>
+    <AppHeader :userData="userData" :pizza="pizza" :price="price" />
+    <component
+      :is="layout"
+      @add-to-cart="
+        price = $event.price;
+        pizza = $event.pizza;
+      "
+      :userData="userData"
+    >
+      <router-view @log-in="userData = $event" />
+    </component>
   </div>
 </template>
 
 <script>
-import EventListener from "../common/components/EventListener.vue";
+import UserLayout from "./UserLayout";
+import AppHeader from "../common/components/AppHeader.vue";
+import { DEFAULT_LAYOUT } from "../common/const";
 
 export default {
   name: "AppLayout",
 
-  components: { EventListener },
+  components: {
+    UserLayout,
+    AppHeader,
+  },
+
+  data() {
+    return {
+      userData: null,
+      price: 0,
+      pizza: {},
+    };
+  },
+
+  computed: {
+    layout() {
+      const layout = this.$route.meta.layout || DEFAULT_LAYOUT;
+      return () => import(`@/layouts/${layout}.vue`);
+    },
+  },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "~@/assets/scss/mixins/page-layout";
-.app-layout {
-  @include page-layout;
-}
-</style>

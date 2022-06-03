@@ -36,9 +36,7 @@
     </div>
 
     <div v-else class="header__user">
-      <router-link
-        :to="$route.name === 'Index' ? 'login' : `${$route.path}/login`"
-        class="header__login"
+      <router-link :to="{ name: link }" class="header__login"
         ><span>Войти</span></router-link
       >
     </div>
@@ -69,11 +67,16 @@ export default {
       return;
     },
     redirectUser() {
-      if (this.$route.path === "/cart") {
+      if (this.$route.name === "Cart") {
         return;
       } else {
-        this.$route.push("/cart");
+        this.$router.push("Cart");
       }
+    },
+  },
+  computed: {
+    link() {
+      return this.$route.name === "Index" ? "IndexLogin" : "CartLogin";
     },
   },
 };

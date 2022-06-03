@@ -8,15 +8,14 @@
           <p>Основной соус:</p>
 
           <RadioButton
-            v-for="item in sauces"
+            v-for="item in jsonPizza.sauces"
             :key="item.id"
             :value="sauceNameToValue.get(item.name)"
             :text="item.name"
+            :id="item.id"
             name="sauce"
-            :isSelected="
-              selectedSauce.value === sauceNameToValue.get(item.name)
-            "
-            @radioChange="$emit('sauceChange', { value: $event, id: item.id })"
+            :isSelected="foundation.sauce.id === item.id"
+            storeAction="Builder/sauceChange"
           >
           </RadioButton>
         </div>
@@ -26,25 +25,10 @@
 
           <ul class="ingredients__list">
             <ItemCounter
-              v-for="ingredient in ingredients"
+              v-for="ingredient in jsonPizza.ingredients"
               :key="ingredient.id"
               :item="ingredient"
-              :isDraggable="
-                customIngredients[ingredient.id].count < MAX_INGREDIENTS
-              "
-              :count="customIngredients[ingredient.id].count"
-              @countInc="
-                $emit('ingredientAdd', { id: ingredient.id, count: $event })
-              "
-              @countDec="
-                $emit('ingredientDec', { id: ingredient.id, count: $event })
-              "
-              @countChange="
-                $emit('ingredientCountChange', {
-                  id: ingredient.id,
-                  count: $event,
-                })
-              "
+              :isDraggable="ingredients[ingredient.id].count < MAX_INGREDIENTS"
             >
             </ItemCounter>
           </ul>
@@ -59,33 +43,10 @@ import RadioButton from "@/common/components/RadioButton";
 import ItemCounter from "@/common/components/ItemCounter";
 import { MAX_INGREDIENTS } from "@/common/const";
 import { sauceNameToValue } from "@/common/enums";
+import { mapState } from "vuex";
 
 export default {
   name: "BuilderIngredientsSelector",
-
-  props: {
-    sauces: {
-      type: Array,
-      required: true,
-    },
-    selectedSauce: {
-      type: Object,
-      required: true,
-    },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-    customIngredients: {
-      type: Object,
-      required: true,
-    },
-  },
-
-  components: {
-    RadioButton,
-    ItemCounter,
-  },
 
   data() {
     return {
@@ -94,11 +55,13 @@ export default {
     };
   },
 
-  methods: {
-    ingredientChange(evt, value, id) {
-      this.$emit("ingredientChange", value, id);
-    },
+  components: {
+    RadioButton,
+    ItemCounter,
+  },
+
+  computed: {
+    ...mapState("Builder", ["foundation", "ingredients", "jsonPizza"]),
   },
 };
 </script>
-<style lang="sss" scoped></style>
