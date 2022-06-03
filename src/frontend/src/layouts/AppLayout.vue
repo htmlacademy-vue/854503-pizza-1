@@ -1,14 +1,7 @@
 <template>
   <div class="app-layout">
-    <AppHeader :userData="userData" :pizza="pizza" :price="price" />
-    <component
-      :is="layout"
-      @add-to-cart="
-        price = $event.price;
-        pizza = $event.pizza;
-      "
-      :userData="userData"
-    >
+    <AppHeader :userData="userData" />
+    <component :is="layout" :userData="userData">
       <router-view @log-in="userData = $event" />
     </component>
   </div>
@@ -30,8 +23,6 @@ export default {
   data() {
     return {
       userData: null,
-      price: 0,
-      pizza: {},
     };
   },
 

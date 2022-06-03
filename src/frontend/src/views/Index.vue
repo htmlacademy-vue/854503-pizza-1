@@ -5,9 +5,9 @@
         <h1 class="title title--big">Конструктор пиццы</h1>
         <BuilderDoughSelector />
 
-        <BuilderSizeSelector :selectedSize="foundation.size" />
+        <BuilderSizeSelector />
 
-        <BuilderIngredientsSelector :customIngredients="ingredients" />
+        <BuilderIngredientsSelector />
 
         <div class="content__pizza">
           <label class="input">
@@ -20,12 +20,7 @@
             />
           </label>
 
-          <BuilderPizzaView
-            @addIngredient="addIngredient"
-            :ingredients="ingredients"
-            :dough="foundation.dough.value"
-            :souce="foundation.sauce.value"
-          />
+          <BuilderPizzaView />
 
           <BuilderPriceCounter />
         </div>
@@ -61,12 +56,6 @@ export default {
   methods: {
     changePizzaName(evt) {
       this.$store.dispatch("Builder/changeName", evt.target.value);
-    },
-
-    addIngredient({ id }) {
-      const ingredient = this.customPizza.ingredients[id].count;
-
-      this.customPizza.ingredients[id].count = ingredient + 1;
     },
   },
 };

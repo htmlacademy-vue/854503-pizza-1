@@ -1,4 +1,5 @@
 import { ADD_ENTITY } from "@/store/mutations-types";
+import { cloneDeep } from "lodash";
 
 const module = "Cart";
 const namespace = (entity) => ({
@@ -17,7 +18,7 @@ export default {
 
   actions: {
     addPizzaToCart({ commit, rootState }) {
-      const processedData = rootState.Builder;
+      const processedData = cloneDeep(rootState.Builder);
 
       delete processedData.jsonPizza;
 
@@ -29,6 +30,12 @@ export default {
         },
         { root: true }
       );
+    },
+  },
+
+  getters: {
+    getCartPrice(state) {
+      return state.pizza.reduce((prev, cur) => prev + cur.price, 0);
     },
   },
 };

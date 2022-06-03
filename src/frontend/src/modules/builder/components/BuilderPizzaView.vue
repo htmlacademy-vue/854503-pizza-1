@@ -1,5 +1,5 @@
 <template>
-  <AppDrop @drop="$emit('addIngredient', $event)">
+  <AppDrop @drop="addIngredient">
     <div class="content__constructor">
       <div
         :class="`pizza pizza--foundation--${doughToClass.get(
@@ -57,6 +57,15 @@ export default {
         }
       }
       return ingredientsList;
+    },
+  },
+
+  methods: {
+    addIngredient(evt) {
+      this.$store.dispatch("Builder/changeIngredientAmount", {
+        id: evt.id,
+        increaseByOne: true,
+      });
     },
   },
 };

@@ -1,18 +1,12 @@
 <template>
   <div class="main-layout">
-    <EventListener @add-to-cart="$emit('add-to-cart', $event)">
-      <slot />
-    </EventListener>
+    <slot />
   </div>
 </template>
 
 <script>
-import EventListener from "../common/components/EventListener.vue";
-
 export default {
   name: "MainLayout",
-
-  components: { EventListener },
 };
 </script>
 

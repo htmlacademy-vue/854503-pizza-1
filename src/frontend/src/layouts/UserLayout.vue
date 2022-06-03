@@ -24,21 +24,14 @@
           >Мои данные</router-link
         >
       </div>
-      <EventListener @add-to-cart="$emit('add-to-cart', $event)">
-        <slot />
-      </EventListener>
+      <slot />
     </main>
   </div>
 </template>
 
 <script>
-import EventListener from "../common/components/EventListener.vue";
-
 export default {
   name: "UserLayout",
-  components: {
-    EventListener,
-  },
 };
 </script>
 

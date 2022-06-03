@@ -12,7 +12,7 @@
     </div>
     <div class="header__cart">
       <router-link to="/cart" :class="{ disabled: $route.name === 'Cart' }"
-        >{{ price }} ₽</router-link
+        >{{ totalPrice }} ₽</router-link
       >
     </div>
     <div v-if="userData" class="header__user">
@@ -52,14 +52,6 @@ export default {
       type: Object,
       default: null,
     },
-    price: {
-      type: Number,
-      default: 0,
-    },
-    pizza: {
-      type: Object,
-      default: null,
-    },
   },
 
   methods: {
@@ -75,6 +67,10 @@ export default {
     },
   },
   computed: {
+    totalPrice() {
+      return this.$store.getters["Cart/getCartPrice"];
+    },
+
     link() {
       return this.$route.name === "Index" ? "IndexLogin" : "CartLogin";
     },

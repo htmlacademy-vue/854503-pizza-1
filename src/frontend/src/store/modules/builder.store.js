@@ -27,9 +27,11 @@ export default {
   state: state(),
 
   actions: {
-    changeIngredientAmount(ctx, { id, count }) {
+    changeIngredientAmount(ctx, { id, count, increaseByOne }) {
       const newIngredients = Object.assign({}, ctx.state.ingredients);
-      let newCount = Number.parseInt(count, 10);
+      let newCount = increaseByOne
+        ? newIngredients[id].count + 1
+        : Number.parseInt(count, 10);
 
       if (newCount < MIN_INGREDIENTS || Number.isNaN(newCount)) {
         newCount = 0;
@@ -38,7 +40,7 @@ export default {
         newCount = MAX_INGREDIENTS;
       }
 
-      newIngredients[id].count = count;
+      newIngredients[id].count = newCount;
 
       ctx.commit(
         UPDATE_ENTITY,
