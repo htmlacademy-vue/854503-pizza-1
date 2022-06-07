@@ -61,9 +61,9 @@ export default {
   },
 
   methods: {
-    addIngredient(evt) {
-      this.$store.dispatch("Builder/changeIngredientAmount", {
-        id: evt.id,
+    addIngredient(id) {
+      this.$store.dispatch("Builder/changeIngredientCount", {
+        id,
         increaseByOne: true,
       });
     },

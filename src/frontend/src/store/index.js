@@ -8,12 +8,12 @@ import {
   DELETE_NOTIFICATION,
   SET_ENTITY,
   ADD_ENTITY,
-  UPDATE_ENTITY,
+  UPDATE_ENTITY_ARRAY,
+  UPDATE_ENTITY_OBJECT,
   DELETE_ENTITY,
 } from "@/store/mutations-types";
 import { MESSAGE_LIVE_TIME } from "@/common/const";
 import jsonUser from "@/static/user.json";
-import jsonPizza from "@/static/pizza";
 
 Vue.use(Vuex);
 
@@ -57,7 +57,25 @@ export default new Vuex.Store({
       }
     },
 
-    [UPDATE_ENTITY](state, { module, entity, value }) {
+    [UPDATE_ENTITY_ARRAY](state, { module, entity, value }) {
+      if (module) {
+        const index = state[module][entity].findIndex(
+          ({ id }) => id === value.id
+        );
+
+        if (~index) {
+          state[module][entity].splice(index, 1, value);
+        }
+      } else {
+        const index = state[entity].findIndex(({ id }) => id === value.id);
+
+        if (~index) {
+          state[entity.splice(index, 1, value)];
+        }
+      }
+    },
+
+    [UPDATE_ENTITY_OBJECT](state, { module, entity, value }) {
       if (module) {
         if (state[module].hasOwnProperty(entity)) {
           state[module][entity] = value;
@@ -80,18 +98,9 @@ export default new Vuex.Store({
       });
     },
 
-    fetchPizza(ctx) {
-      const pizza = jsonPizza;
-
-      ctx.commit(SET_ENTITY, {
-        module: null,
-        entity: "pizza",
-        value: pizza,
-      });
-    },
-
     async init(ctx) {
       ctx.dispatch("fetchUser");
+      ctx.dispatch("Cart/fetchMisc");
     },
 
     async createNotification(ctx, { ...notification }) {

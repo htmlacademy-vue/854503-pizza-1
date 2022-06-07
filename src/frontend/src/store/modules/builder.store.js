@@ -5,45 +5,49 @@ import {
   findItemById,
 } from "@/common/helpers";
 import jsonPizza from "@/static/pizza";
-import { UPDATE_ENTITY } from "@/store/mutations-types";
-import { MAX_INGREDIENTS, MIN_INGREDIENTS } from "@/common/const";
-import { cloneDeep } from "lodash";
+import {
+  UPDATE_ENTITY_OBJECT,
+  CLEAR_STATE,
+  SET_PIZZA_TO_CHANGE,
+} from "@/store/mutations-types";
+import { MAX_VALUE, MIN_VALUE } from "@/common/const";
+import { cloneDeep, uniqueId } from "lodash";
 
 const module = "Builder";
 const namespace = (entity) => ({ module, entity });
 
 const state = () => ({
   foundation: getDefaultPizza(jsonPizza),
-  ingredients,
+  ingredients: makeIngredientsList(getIngredients(jsonPizza)),
   name: "",
   price: 0,
+  id: Number.parseInt(uniqueId(), 10),
   jsonPizza,
+  onChange: false,
 });
-
-const ingredients = makeIngredientsList(getIngredients(jsonPizza));
 
 export default {
   namespaced: true,
   state: state(),
 
   actions: {
-    changeIngredientAmount(ctx, { id, count, increaseByOne }) {
+    changeIngredientCount(ctx, { id, count, increaseByOne }) {
       const newIngredients = Object.assign({}, ctx.state.ingredients);
       let newCount = increaseByOne
         ? newIngredients[id].count + 1
         : Number.parseInt(count, 10);
 
-      if (newCount < MIN_INGREDIENTS || Number.isNaN(newCount)) {
+      if (newCount < MIN_VALUE || Number.isNaN(newCount)) {
         newCount = 0;
       }
-      if (newCount > MAX_INGREDIENTS) {
-        newCount = MAX_INGREDIENTS;
+      if (newCount > MAX_VALUE) {
+        newCount = MAX_VALUE;
       }
 
       newIngredients[id].count = newCount;
 
       ctx.commit(
-        UPDATE_ENTITY,
+        UPDATE_ENTITY_OBJECT,
         {
           ...namespace("ingredients"),
           value: newIngredients,
@@ -54,21 +58,21 @@ export default {
       ctx.dispatch("changePrice");
     },
 
-    doughChange(ctx, { value, id }) {
-      let newDough = Object.assign({}, ctx.state.foundation.dough);
-      const foundationClone = cloneDeep(ctx.state.foundation);
+    doughChange({ state, commit, dispatch }, { value, id }) {
+      let newDough = Object.assign({}, state.foundation.dough);
+      const foundationClone = cloneDeep(state.foundation);
 
       newDough = {
         ...newDough,
         value,
-        price: findItemById(ctx.state.jsonPizza.dough, id).price,
+        price: findItemById(state.jsonPizza.dough, id).price,
         id,
       };
 
       foundationClone.dough = newDough;
 
-      ctx.commit(
-        UPDATE_ENTITY,
+      commit(
+        UPDATE_ENTITY_OBJECT,
         {
           ...namespace("foundation"),
           value: foundationClone,
@@ -76,7 +80,7 @@ export default {
         { root: true }
       );
 
-      ctx.dispatch("changePrice");
+      dispatch("changePrice");
     },
 
     sauceChange(ctx, { value, id }) {
@@ -87,13 +91,14 @@ export default {
         ...newSauce,
         value,
         price: findItemById(ctx.state.jsonPizza.sauces, id).price,
+        name: findItemById(ctx.state.jsonPizza.sauces, id).name,
         id,
       };
 
       foundationClone.sauce = newSauce;
 
       ctx.commit(
-        UPDATE_ENTITY,
+        UPDATE_ENTITY_OBJECT,
         {
           ...namespace("foundation"),
           value: foundationClone,
@@ -112,13 +117,14 @@ export default {
         ...newSize,
         value,
         multiplier: findItemById(ctx.state.jsonPizza.sizes, id).multiplier,
+        name: findItemById(ctx.state.jsonPizza.sizes, id).name,
         id,
       };
 
       foundationClone.size = newSize;
 
       ctx.commit(
-        UPDATE_ENTITY,
+        UPDATE_ENTITY_OBJECT,
         {
           ...namespace("foundation"),
           value: foundationClone,
@@ -142,7 +148,7 @@ export default {
 
       currentPrice = currentPrice * ctx.state.foundation.size.multiplier;
       ctx.commit(
-        UPDATE_ENTITY,
+        UPDATE_ENTITY_OBJECT,
         {
           ...namespace("price"),
           value: currentPrice,
@@ -153,7 +159,7 @@ export default {
 
     changeName(ctx, name) {
       ctx.commit(
-        UPDATE_ENTITY,
+        UPDATE_ENTITY_OBJECT,
         {
           ...namespace("name"),
           value: name,
@@ -169,5 +175,13 @@ export default {
     },
   },
 
-  mutations: {},
+  mutations: {
+    [CLEAR_STATE]() {
+      this.state.Builder = state();
+    },
+
+    [SET_PIZZA_TO_CHANGE](state, pizza) {
+      this.state.Builder = { ...pizza, jsonPizza, onChange: true };
+    },
+  },
 };

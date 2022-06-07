@@ -16,6 +16,7 @@
               type="text"
               name="pizza_name"
               placeholder="Введите название пиццы"
+              :value="name"
               @input="changePizzaName"
             />
           </label>

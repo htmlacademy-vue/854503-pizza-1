@@ -25,3 +25,8 @@ export const notificationTypes = {
   ERROR: "error",
   WARNING: "warning",
 };
+
+export const doughValueToText = new Map([
+  ["light", "тонком"],
+  ["large", "толстом"],
+]);

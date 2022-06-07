@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header__logo">
-      <router-link to="/" class="logo">
+      <router-link :to="{ name: 'Index' }" class="logo">
         <img
           src="img/logo.svg"
           alt="V!U!E! Pizza logo"
@@ -11,12 +11,14 @@
       </router-link>
     </div>
     <div class="header__cart">
-      <router-link to="/cart" :class="{ disabled: $route.name === 'Cart' }"
+      <router-link
+        :to="{ name: 'Cart' }"
+        :class="{ disabled: $route.name === 'Cart' }"
         >{{ totalPrice }} ₽</router-link
       >
     </div>
     <div v-if="userData" class="header__user">
-      <router-link to="/profile">
+      <router-link :to="{ name: 'Profile' }">
         <picture>
           <source
             type="image/webp"

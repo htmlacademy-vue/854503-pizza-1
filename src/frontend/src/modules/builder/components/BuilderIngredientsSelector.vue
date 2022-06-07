@@ -24,13 +24,13 @@
           <p>Начинка:</p>
 
           <ul class="ingredients__list">
-            <ItemCounter
-              v-for="ingredient in jsonPizza.ingredients"
-              :key="ingredient.id"
-              :item="ingredient"
-              :isDraggable="ingredients[ingredient.id].count < MAX_INGREDIENTS"
-            >
-            </ItemCounter>
+            <BuilderIngredientCounter
+              v-for="{ id, ingredientName, name } in jsonPizza.ingredients"
+              :key="id"
+              :id="id"
+              :ingredientName="ingredientName"
+              :name="name"
+            />
           </ul>
         </div>
       </div>
@@ -40,8 +40,7 @@
 
 <script>
 import RadioButton from "@/common/components/RadioButton";
-import ItemCounter from "@/common/components/ItemCounter";
-import { MAX_INGREDIENTS } from "@/common/const";
+import BuilderIngredientCounter from "./BuilderIngredientCounter.vue";
 import { sauceNameToValue } from "@/common/enums";
 import { mapState } from "vuex";
 
@@ -50,14 +49,13 @@ export default {
 
   data() {
     return {
-      MAX_INGREDIENTS,
       sauceNameToValue,
     };
   },
 
   components: {
     RadioButton,
-    ItemCounter,
+    BuilderIngredientCounter,
   },
 
   computed: {

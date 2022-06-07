@@ -2,7 +2,7 @@
   <div class="user-layout">
     <main class="layout">
       <div class="layout__sidebar sidebar">
-        <router-link to="/" class="logo layout__logo">
+        <router-link :to="{ name: 'Index' }" class="logo layout__logo">
           <img
             src="img/logo.svg"
             alt="V!U!E! Pizza logo"
@@ -14,13 +14,13 @@
         <router-link
           active-class="layout__link--active"
           class="layout__link"
-          to="/orders"
+          :to="{ name: 'Orders' }"
           >История заказов</router-link
         >
         <router-link
           active-class="layout__link--active"
           class="layout__link"
-          to="/profile"
+          :to="{ name: 'Profile' }"
           >Мои данные</router-link
         >
       </div>

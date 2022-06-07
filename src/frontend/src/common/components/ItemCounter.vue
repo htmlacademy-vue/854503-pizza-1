@@ -1,85 +1,86 @@
 <template>
-  <li class="ingredients__item">
-    <AppDrop @drop="$emit('drop', $event)">
-      <AppDrag :transferData="item" :isDraggable="isDraggable">
-        <span class="filling" :class="`filling--${item.ingredientName}`">
-          {{ item.name }}
-        </span>
-
-        <div class="counter counter--orange ingredients__counter">
-          <button
-            type="button"
-            class="counter__button counter__button--minus"
-            :disabled="count === MIN_INGREDIENTS"
-            @click="countChange(count - 1)"
-          >
-            <span class="visually-hidden">Меньше</span>
-          </button>
-          <input
-            type="text"
-            name="counter"
-            class="counter__input"
-            :value="count"
-            @change="countChange($event.target.value)"
-          />
-          <button
-            type="button"
-            class="counter__button counter__button--plus"
-            :disabled="count >= MAX_INGREDIENTS"
-            @click="countChange(count + 1)"
-          >
-            <span class="visually-hidden">Больше</span>
-          </button>
-        </div>
-      </AppDrag>
-    </AppDrop>
-  </li>
+  <div :class="`counter ${block}__counter`">
+    <button
+      type="button"
+      class="counter__button counter__button--minus"
+      :disabled="count === MIN_VALUE"
+      @click="countChange(count - 1)"
+    >
+      <span class="visually-hidden">Меньше</span>
+    </button>
+    <input
+      type="text"
+      name="counter"
+      class="counter__input"
+      :value="count"
+      @change="countChange($event.target.value)"
+    />
+    <button
+      type="button"
+      :class="[
+        'counter__button',
+        'counter__button--plus',
+        color ? `counter__button--${color}` : '',
+      ]"
+      :disabled="!maxValue ? false : count >= maxValue"
+      @click="countChange(count + 1)"
+    >
+      <span class="visually-hidden">Больше</span>
+    </button>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { MAX_INGREDIENTS, MIN_INGREDIENTS } from "../const";
-import AppDrag from "./AppDrag";
-import AppDrop from "./AppDrop";
+import { MIN_VALUE } from "../const";
 
 export default {
   name: "ItemCounter",
 
-  components: {
-    AppDrag,
-    AppDrop,
-  },
-
   props: {
-    item: {
-      type: Object,
+    color: {
+      type: String,
+      required: false,
+    },
+    id: {
+      type: Number,
+      default: null,
+    },
+    name: {
+      type: String,
+      default: "",
+    },
+    block: {
+      type: String,
       required: true,
     },
-    isDraggable: {
-      type: Boolean,
+    count: {
+      type: Number,
+      default: 0,
+    },
+    maxValue: {
+      type: Number,
+      default: null,
+    },
+    storeModule: {
+      type: String,
+      required: true,
+    },
+    storeAction: {
+      type: String,
       required: true,
     },
   },
   data() {
     return {
-      MAX_INGREDIENTS,
-      MIN_INGREDIENTS,
+      MIN_VALUE,
     };
   },
-
-  computed: {
-    ...mapGetters("Builder", ["getIngredientCount"]),
-
-    count() {
-      return this.getIngredientCount(this.item.id);
-    },
-  },
-
   methods: {
     countChange(value) {
-      this.$store.dispatch("Builder/changeIngredientAmount", {
-        id: this.item.id,
+      this.$store.dispatch(`${this.storeModule}/${this.storeAction}`, {
+        id: this.id,
         count: value,
+        name: this.name,
       });
     },
   },
