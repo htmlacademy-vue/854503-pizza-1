@@ -15,25 +15,35 @@ const namespace = (entity) => ({
   entity,
 });
 
-const state = () => ({
+const defaultState = () => ({
   pizza: [],
   misc: [],
   name: "",
   price: 0,
+  miscFromServer: [],
 });
 
 export default {
   namespaced: true,
-  state: state(),
+  state: defaultState(),
 
   actions: {
     fetchMisc({ commit }) {
-      const misc = jsonMisc.map(miscFromServerAdapter);
+      const misc = jsonMisc;
+      const miscCopy = cloneDeep(misc).map(miscFromServerAdapter);
 
       commit(
         SET_ENTITY,
         {
           ...namespace("misc"),
+          value: miscCopy,
+        },
+        { root: true }
+      );
+      commit(
+        SET_ENTITY,
+        {
+          ...namespace("miscFromServer"),
           value: misc,
         },
         { root: true }
@@ -125,6 +135,34 @@ export default {
       }
 
       commit(`Builder/${CLEAR_STATE}`, null, { root: true });
+    },
+
+    clearCart({ state, commit }) {
+      let miscCopy = cloneDeep(state.miscFromServer);
+
+      commit(CLEAR_STATE);
+      commit(
+        SET_ENTITY,
+        {
+          ...namespace("miscFromServer"),
+          value: miscCopy,
+        },
+        { root: true }
+      );
+      commit(
+        SET_ENTITY,
+        {
+          ...namespace("misc"),
+          value: miscCopy.map(miscFromServerAdapter),
+        },
+        { root: true }
+      );
+    },
+  },
+
+  mutations: {
+    [CLEAR_STATE]() {
+      this.state.Cart = defaultState();
     },
   },
 

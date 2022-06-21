@@ -4,5 +4,14 @@
   "email": "user@example.com",
   "password": "user@example.com",
   "avatar": "/public/img/users/user.jpg",
+  "savedAddresses": [
+    {
+      "id": "1",
+      "name": "Дом",
+      "street": "Первая",
+      "apartment": "1",
+      "house": "17"
+    }
+  ],
   "phone": "+777 777 777"
 }

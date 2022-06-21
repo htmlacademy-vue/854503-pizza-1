@@ -13,7 +13,6 @@ import {
   DELETE_ENTITY,
 } from "@/store/mutations-types";
 import { MESSAGE_LIVE_TIME } from "@/common/const";
-import jsonUser from "@/static/user.json";
 
 Vue.use(Vuex);
 
@@ -88,18 +87,8 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    fetchUser(ctx) {
-      const user = jsonUser;
-
-      ctx.commit(SET_ENTITY, {
-        module: null,
-        entity: "user",
-        value: user,
-      });
-    },
-
     async init(ctx) {
-      ctx.dispatch("fetchUser");
+      ctx.dispatch("Auth/fetchUser");
       ctx.dispatch("Cart/fetchMisc");
     },
 

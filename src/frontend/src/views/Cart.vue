@@ -40,7 +40,11 @@
         </div>
 
         <div class="cart__form">
-          <CartAdressForm />
+          <CartAddressForm
+            v-model="addressNumber"
+            @input="input"
+            @infoChange="isDisabled = $event"
+          />
         </div>
       </div>
       <router-view @log-in="$emit('log-in', $event)" />
@@ -61,7 +65,14 @@
       </div>
 
       <div class="footer__submit">
-        <button type="submit" class="button">Оформить заказ</button>
+        <button
+          @click.prevent="order"
+          type="submit"
+          class="button"
+          :disabled="isDisabled"
+        >
+          Оформить заказ
+        </button>
       </div>
     </section>
   </form>
@@ -70,21 +81,79 @@
 <script>
 import CartPizza from "@/modules/Cart/CartPizza";
 import CartMisc from "@/modules/Cart/CartMisc";
-import CartAdressForm from "@/modules/Cart/CartAdressForm";
+import CartAddressForm from "@/modules/Cart/CartAddressForm";
+import validator from "@/common/mixins/validator";
 import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "Cart",
+
+  components: {
+    CartPizza,
+    CartMisc,
+    CartAddressForm,
+  },
+
+  data() {
+    return {
+      addressInfo: {},
+      addressNumber: 0,
+      isDisabled: true,
+      validations: {
+        tel: {
+          error: "",
+          rules: ["tel"],
+        },
+        street: {
+          error: "",
+          rules: ["required"],
+        },
+        apartment: {
+          error: "",
+          rules: ["required"],
+        },
+        house: {
+          error: "",
+          rules: ["required"],
+        },
+      },
+    };
+  },
+
+  mixins: [validator],
 
   computed: {
     ...mapState("Cart", ["pizza", "misc"]),
     ...mapGetters("Cart", ["getCartPrice"]),
   },
 
-  components: {
-    CartPizza,
-    CartMisc,
-    CartAdressForm,
+  methods: {
+    input(evt) {
+      this.addressInfo = evt.selectedAddress;
+    },
+
+    order() {
+      let isValid = false;
+
+      if (this.addressNumber === 0) {
+        isValid = this.$validateFields(
+          { tel: this.addressInfo.tel },
+          { tel: this.validations.tel }
+        );
+      } else {
+        isValid = this.$validateFields(this.addressInfo, this.validations);
+      }
+
+      if (isValid) {
+        this.$store.dispatch("Orders/addOrder");
+        this.$store.dispatch("Cart/clearCart");
+        this.$router.push({ name: "Success" });
+      } else {
+        Object.keys(this.validations).forEach((key) => {
+          console.log(this.validations[key].error);
+        });
+      }
+    },
   },
 };
 </script>

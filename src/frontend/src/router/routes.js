@@ -22,6 +22,7 @@ export const routes = [
         component: () => import("../views/Login"),
       },
       {
+        name: "Success",
         path: "success",
         component: () => import("../views/Popup"),
       },
