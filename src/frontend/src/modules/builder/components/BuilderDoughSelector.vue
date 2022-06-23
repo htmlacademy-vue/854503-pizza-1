@@ -9,8 +9,10 @@
           :item="item"
           :value="doughNameToValue.get(item.name)"
           :isSelected="foundation.dough.id === item.id"
-          storeAction="Builder/doughChange"
           name="dough"
+          @selectorChange="
+            selectorChange({ id: item.id, value: $event.target.value })
+          "
         />
       </div>
     </div>
@@ -25,6 +27,10 @@ import { mapState } from "vuex";
 export default {
   name: "BuilderDoughSelector",
 
+  components: {
+    SelectorItem,
+  },
+
   data() {
     return {
       doughNameToValue,
@@ -35,8 +41,13 @@ export default {
     ...mapState("Builder", ["foundation", "jsonPizza"]),
   },
 
-  components: {
-    SelectorItem,
+  methods: {
+    selectorChange({ id, value }) {
+      this.$store.dispatch("Builder/doughChange", {
+        id,
+        value,
+      });
+    },
   },
 };
 </script>

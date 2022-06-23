@@ -33,9 +33,7 @@ export default {
   actions: {
     changeIngredientCount(ctx, { id, count, increaseByOne }) {
       const newIngredients = Object.assign({}, ctx.state.ingredients);
-      let newCount = increaseByOne
-        ? newIngredients[id].count + 1
-        : Number.parseInt(count, 10);
+      let newCount = increaseByOne ? newIngredients[id].count + 1 : count;
 
       if (newCount < MIN_VALUE || Number.isNaN(newCount)) {
         newCount = 0;

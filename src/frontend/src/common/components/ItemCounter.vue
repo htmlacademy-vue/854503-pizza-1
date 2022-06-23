@@ -61,14 +61,6 @@ export default {
       type: Number,
       default: null,
     },
-    storeModule: {
-      type: String,
-      required: true,
-    },
-    storeAction: {
-      type: String,
-      required: true,
-    },
   },
   data() {
     return {
@@ -77,11 +69,7 @@ export default {
   },
   methods: {
     countChange(value) {
-      this.$store.dispatch(`${this.storeModule}/${this.storeAction}`, {
-        id: this.id,
-        count: value,
-        name: this.name,
-      });
+      this.$emit("countChange", Number.parseInt(value, 10));
     },
   },
 };

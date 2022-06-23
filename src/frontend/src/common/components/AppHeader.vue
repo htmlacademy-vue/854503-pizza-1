@@ -34,7 +34,7 @@
         </picture>
         <span>{{ user.name }}</span>
       </router-link>
-      <a @click.prevent="logout" class="header__logout"><span>Выйти</span></a>
+      <a @click.prevent class="header__logout"><span>Выйти</span></a>
     </div>
 
     <div v-else class="header__user">
@@ -63,9 +63,6 @@ export default {
   },
 
   methods: {
-    logout() {
-      return;
-    },
     redirectUser() {
       if (this.$route.name === "Cart") {
         return;

@@ -15,7 +15,9 @@
             :id="item.id"
             :isSelected="foundation.sauce.id === item.id"
             name="sauce"
-            storeAction="Builder/sauceChange"
+            @radioChange="
+              radioChange({ id: item.id, value: $event.target.value })
+            "
           >
           </RadioButton>
         </div>
@@ -60,6 +62,15 @@ export default {
 
   computed: {
     ...mapState("Builder", ["foundation", "ingredients", "jsonPizza"]),
+  },
+
+  methods: {
+    radioChange({ id, value }) {
+      this.$store.dispatch("Builder/sauceChange", {
+        id,
+        value,
+      });
+    },
   },
 };
 </script>

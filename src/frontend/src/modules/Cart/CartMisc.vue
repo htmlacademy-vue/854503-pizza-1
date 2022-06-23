@@ -11,8 +11,7 @@
         :count="count"
         color="orange"
         block="additional-list"
-        storeAction="changeMiscCount"
-        storeModule="Cart"
+        @countChange="$countChange($event, 'Cart/changeMiscCount')"
       />
 
       <div class="additional-list__price">
@@ -25,8 +24,11 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import ItemCounter from "../../common/components/ItemCounter.vue";
+import countChange from "@/common/mixins/countChange";
+
 export default {
   name: "CartMiscCard",
+
   props: {
     id: {
       type: Number,
@@ -49,14 +51,19 @@ export default {
       required: true,
     },
   },
+
   computed: {
     ...mapState("Cart", ["misc"]),
   },
+
+  mixins: [countChange],
+
   methods: {
     ...mapActions("Cart", {
       changeMiscCount: "changeMiscCount",
     }),
   },
+
   components: { ItemCounter },
 };
 </script>

@@ -6,7 +6,7 @@
       :checked="isSelected"
       type="radio"
       class="visually-hidden"
-      @input="selectorChange"
+      @input="$emit('selectorChange', $event)"
     />
     <b v-if="name === 'dough'">{{ item.name }}</b>
     <span v-else>{{ item.name }}</span>
@@ -34,19 +34,6 @@ export default {
     value: {
       type: String,
       required: true,
-    },
-    storeAction: {
-      type: String,
-      required: true,
-    },
-  },
-
-  methods: {
-    selectorChange(evt) {
-      this.$store.dispatch(this.storeAction, {
-        id: this.item.id,
-        value: evt.target.value,
-      });
     },
   },
 };

@@ -13,8 +13,7 @@
       :maxValue="maxIngredients"
       :id="id"
       block="ingredients"
-      storeModule="Builder"
-      storeAction="changeIngredientCount"
+      @countChange="$countChange($event, 'Builder/changeIngredientCount')"
     />
   </li>
 </template>
@@ -25,6 +24,7 @@ import AppDrop from "@/common/components/AppDrop.vue";
 import ItemCounter from "@/common/components/ItemCounter.vue";
 import { MAX_VALUE as maxIngredients } from "@/common/const";
 import { mapGetters } from "vuex";
+import countChange from "@/common/mixins/countChange";
 
 export default {
   name: "BuilderIngredientCounter",
@@ -59,6 +59,8 @@ export default {
       default: false,
     },
   },
+
+  mixins: [countChange],
 
   computed: {
     ...mapGetters("Builder", ["getIngredientCount"]),

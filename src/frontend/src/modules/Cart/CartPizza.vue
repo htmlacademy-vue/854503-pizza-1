@@ -25,8 +25,7 @@
       :count="count"
       color="orange"
       block="additional-list"
-      storeAction="changePizzaCount"
-      storeModule="Cart"
+      @countChange="$countChange($event, 'Cart/changePizzaCount')"
     />
 
     <div class="cart-list__price">
@@ -49,6 +48,7 @@
 import ItemCounter from "@/common/components/ItemCounter";
 import { SET_PIZZA_TO_CHANGE } from "@/store/mutations-types";
 import { doughValueToText } from "@/common/enums";
+import countChange from "@/common/mixins/countChange";
 
 export default {
   name: "CartPizza",
@@ -97,6 +97,8 @@ export default {
       require: true,
     },
   },
+
+  mixins: [countChange],
 
   computed: {
     filling() {
