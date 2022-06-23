@@ -4,10 +4,10 @@
       <span class="cart-form__label">Получение заказа:</span>
 
       <select
-        @input="selectAddress"
-        :value="addressNumber"
+        :value="addressIndex"
         name="test"
         class="select"
+        @input="selectAddress"
       >
         <option
           v-for="(address, index) in addresses"
@@ -30,17 +30,17 @@
       />
     </label>
 
-    <div v-if="addressNumber > 0" class="cart-form__address">
+    <div v-if="addressIndex > 0" class="cart-form__address">
       <span class="cart-form__label">Новый адрес:</span>
 
       <div class="cart-form__input">
         <label class="input">
           <span>Улица*</span>
           <input
-            type="text"
-            name="street"
             :value="selectedAddress.street"
             :disabled="!isChangeable"
+            type="text"
+            name="street"
             @input="input"
           />
         </label>
@@ -50,10 +50,10 @@
         <label class="input">
           <span>Дом*</span>
           <input
-            type="text"
-            name="house"
             :value="selectedAddress.house"
             :disabled="!isChangeable"
+            type="text"
+            name="house"
             @input="input"
           />
         </label>
@@ -63,10 +63,10 @@
         <label class="input">
           <span>Квартира</span>
           <input
-            type="text"
-            name="apartment"
             :value="selectedAddress.apartment"
             :disabled="!isChangeable"
+            type="text"
+            name="apartment"
             @input="input"
           />
         </label>
@@ -95,13 +95,8 @@ export default {
     };
   },
 
-  model: {
-    prop: "addressNumber",
-    event: "addressNumberChange",
-  },
-
   props: {
-    addressNumber: {
+    addressIndex: {
       type: [Number, String],
       default: 0,
     },
@@ -152,7 +147,7 @@ export default {
         this.selectedAddress = emptyAddress();
         this.isChangeable = true;
       }
-      this.$emit("addressNumberChange", evt.target.value);
+      this.$emit("update:addressIndex", evt.target.value);
       this.$emit("input", { selectedAddress: this.selectedAddress });
       this.$emit("infoChange", this.isDisabled);
     },

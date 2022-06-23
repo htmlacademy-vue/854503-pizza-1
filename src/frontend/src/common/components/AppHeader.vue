@@ -21,8 +21,8 @@
       <router-link :to="{ name: 'Profile' }">
         <picture>
           <source
-            type="image/webp"
             :srcset="`${user.avatar} 1x, ${user.avatar} 2x`"
+            type="image/webp"
           />
           <img
             :src="user.avatar"
@@ -38,9 +38,14 @@
     </div>
 
     <div v-else class="header__user">
-      <router-link :to="{ name: link }" class="header__login"
-        ><span>Войти</span></router-link
+      <router-link
+        :to="{
+          name: link,
+        }"
+        class="header__login"
       >
+        <span>Войти</span>
+      </router-link>
     </div>
   </header>
 </template>

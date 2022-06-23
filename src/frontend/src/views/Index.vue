@@ -13,10 +13,10 @@
           <label class="input">
             <span class="visually-hidden">Название пиццы</span>
             <input
+              :value="name"
               type="text"
               name="pizza_name"
               placeholder="Введите название пиццы"
-              :value="name"
               @input="changePizzaName"
             />
           </label>

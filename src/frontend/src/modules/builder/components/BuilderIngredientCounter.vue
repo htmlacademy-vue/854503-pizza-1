@@ -9,10 +9,10 @@
     </AppDrop>
 
     <ItemCounter
-      block="ingredients"
       :count="count"
       :maxValue="maxIngredients"
       :id="id"
+      block="ingredients"
       storeModule="Builder"
       storeAction="changeIngredientCount"
     />

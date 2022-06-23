@@ -41,7 +41,7 @@
 
         <div class="cart__form">
           <CartAddressForm
-            v-model="addressNumber"
+            :addressIndex.sync="addressIndex"
             @input="input"
             @infoChange="isDisabled = $event"
           />
@@ -66,10 +66,10 @@
 
       <div class="footer__submit">
         <button
-          @click.prevent="order"
+          :disabled="isDisabled"
           type="submit"
           class="button"
-          :disabled="isDisabled"
+          @click.prevent="order"
         >
           Оформить заказ
         </button>
@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       addressInfo: {},
-      addressNumber: 0,
+      addressIndex: 0,
       isDisabled: true,
       validations: {
         tel: {
@@ -135,7 +135,7 @@ export default {
     order() {
       let isValid = false;
 
-      if (this.addressNumber === 0) {
+      if (this.addressIndex === 0) {
         isValid = this.$validateFields(
           { tel: this.addressInfo.tel },
           { tel: this.validations.tel }

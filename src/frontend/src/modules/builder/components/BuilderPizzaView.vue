@@ -10,12 +10,12 @@
           <div
             v-for="ingredient in addedIngredients"
             :key="ingredient.ingredientName + ingredient.count"
-            class="pizza__filling"
             :class="[
               `pizza__filling--${ingredient.ingredientName}`,
               { 'pizza__filling--second': ingredient.count === 2 },
               { 'pizza__filling--third': ingredient.count === 3 },
             ]"
+            class="pizza__filling"
           ></div>
         </div>
       </div>

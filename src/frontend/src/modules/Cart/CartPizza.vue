@@ -2,11 +2,11 @@
   <li class="cart-list__item">
     <div class="product cart-list__product">
       <img
+        :alt="name"
         src="img/product.svg"
         class="product__img"
         width="56"
         height="56"
-        :alt="name"
       />
       <div class="product__text">
         <h2>{{ name }}</h2>
@@ -35,9 +35,9 @@
 
     <div class="cart-list__button">
       <button
-        @click.prevent="changePizza"
         type="button"
         class="cart-list__edit"
+        @click.prevent="changePizza"
       >
         Изменить
       </button>

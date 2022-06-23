@@ -1,28 +1,28 @@
 <template>
   <div :class="`counter ${block}__counter`">
     <button
+      :disabled="count === MIN_VALUE"
       type="button"
       class="counter__button counter__button--minus"
-      :disabled="count === MIN_VALUE"
       @click="countChange(count - 1)"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
     <input
+      :value="count"
       type="text"
       name="counter"
       class="counter__input"
-      :value="count"
       @change="countChange($event.target.value)"
     />
     <button
-      type="button"
       :class="[
         'counter__button',
         'counter__button--plus',
         color ? `counter__button--${color}` : '',
       ]"
       :disabled="!maxValue ? false : count >= maxValue"
+      type="button"
       @click="countChange(count + 1)"
     >
       <span class="visually-hidden">Больше</span>

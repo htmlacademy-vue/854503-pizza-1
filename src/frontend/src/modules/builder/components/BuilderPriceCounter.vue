@@ -2,9 +2,9 @@
   <div class="content__result">
     <p>Итого: {{ price }} ₽</p>
     <button
+      :disabled="isDisabled"
       type="button"
       class="button"
-      :disabled="isDisabled"
       @click="addToCart"
     >
       Готовьте!

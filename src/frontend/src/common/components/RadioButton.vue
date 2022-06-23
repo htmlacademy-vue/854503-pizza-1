@@ -1,10 +1,10 @@
 <template>
   <label class="radio ingredients__input">
     <input
-      type="radio"
       :name="name"
       :value="value"
       :checked="isSelected"
+      type="radio"
       @input="radioChange"
     />
     <span>{{ text }}</span>

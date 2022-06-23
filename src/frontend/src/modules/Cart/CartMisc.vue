@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     ...mapActions("Cart", {
-      changeMisccount: "changeMiscCount",
+      changeMiscCount: "changeMiscCount",
     }),
   },
   components: { ItemCounter },

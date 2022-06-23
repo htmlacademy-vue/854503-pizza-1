@@ -1,10 +1,10 @@
 <template>
   <label :class="`${name}__input ${name}__input--${value}`">
     <input
-      type="radio"
       :name="name"
       :value="value"
       :checked="isSelected"
+      type="radio"
       class="visually-hidden"
       @input="selectorChange"
     />

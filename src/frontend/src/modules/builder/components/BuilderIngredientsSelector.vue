@@ -13,8 +13,8 @@
             :value="sauceNameToValue.get(item.name)"
             :text="item.name"
             :id="item.id"
-            name="sauce"
             :isSelected="foundation.sauce.id === item.id"
+            name="sauce"
             storeAction="Builder/sauceChange"
           >
           </RadioButton>
