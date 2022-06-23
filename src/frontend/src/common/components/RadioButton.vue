@@ -1,11 +1,11 @@
 <template>
   <label class="radio ingredients__input">
     <input
-      type="radio"
       :name="name"
       :value="value"
       :checked="isSelected"
-      @input="$emit('radioChange', $event.target.value)"
+      type="radio"
+      @input="$emit('radioChange', $event)"
     />
     <span>{{ text }}</span>
   </label>

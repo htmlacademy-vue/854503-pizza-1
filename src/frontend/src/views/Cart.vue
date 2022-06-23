@@ -6,299 +6,154 @@
           <h1 class="title title--big">Корзина</h1>
         </div>
 
-        <!-- <div class="sheet cart__empty">
+        <div v-if="!pizza.length" class="sheet cart__empty">
           <p>В корзине нет ни одного товара</p>
-        </div> -->
+        </div>
 
         <ul class="cart-list sheet">
-          <li class="cart-list__item">
-            <div class="product cart-list__product">
-              <img
-                src="img/product.svg"
-                class="product__img"
-                width="56"
-                height="56"
-                alt="Капричоза"
-              />
-              <div class="product__text">
-                <h2>Капричоза</h2>
-                <ul>
-                  <li>30 см, на тонком тесте</li>
-                  <li>Соус: томатный</li>
-                  <li>Начинка: грибы, лук, ветчина, пармезан, ананас</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="counter cart-list__counter">
-              <button
-                type="button"
-                class="counter__button counter__button--minus"
-              >
-                <span class="visually-hidden">Меньше</span>
-              </button>
-              <input
-                type="text"
-                name="counter"
-                class="counter__input"
-                value="1"
-              />
-              <button
-                type="button"
-                class="counter__button counter__button--plus counter__button--orange"
-              >
-                <span class="visually-hidden">Больше</span>
-              </button>
-            </div>
-
-            <div class="cart-list__price">
-              <b>782 ₽</b>
-            </div>
-
-            <div class="cart-list__button">
-              <button type="button" class="cart-list__edit">Изменить</button>
-            </div>
-          </li>
-          <li class="cart-list__item">
-            <div class="product cart-list__product">
-              <img
-                src="img/product.svg"
-                class="product__img"
-                width="56"
-                height="56"
-                alt="Любимая пицца"
-              />
-              <div class="product__text">
-                <h2>Любимая пицца</h2>
-                <ul>
-                  <li>30 см, на тонком тесте</li>
-                  <li>Соус: томатный</li>
-                  <li>
-                    Начинка: грибы, лук, ветчина, пармезан, ананас, бекон, блю
-                    чиз
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="counter cart-list__counter">
-              <button
-                type="button"
-                class="counter__button counter__button--minus"
-              >
-                <span class="visually-hidden">Меньше</span>
-              </button>
-              <input
-                type="text"
-                name="counter"
-                class="counter__input"
-                value="2"
-              />
-              <button
-                type="button"
-                class="counter__button counter__button--plus counter__button--orange"
-              >
-                <span class="visually-hidden">Больше</span>
-              </button>
-            </div>
-
-            <div class="cart-list__price">
-              <b>782 ₽</b>
-            </div>
-
-            <div class="cart-list__button">
-              <button type="button" class="cart-list__edit">Изменить</button>
-            </div>
-          </li>
+          <CartPizza
+            v-for="item in pizza"
+            :key="item.id"
+            :id="item.id"
+            :name="item.name"
+            :count="item.count"
+            :ingredients="item.ingredients"
+            :sauce="item.foundation.sauce"
+            :dough="item.foundation.dough"
+            :size="item.foundation.size"
+            :price="item.price"
+          />
         </ul>
 
         <div class="cart__additional">
           <ul class="additional-list">
-            <li class="additional-list__item sheet">
-              <p class="additional-list__description">
-                <img
-                  src="img/cola.svg"
-                  width="39"
-                  height="60"
-                  alt="Coca-Cola 0,5 литра"
-                />
-                <span>Coca-Cola 0,5 литра</span>
-              </p>
-
-              <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="counter__button counter__button--plus counter__button--orange"
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
-
-                <div class="additional-list__price">
-                  <b>× 56 ₽</b>
-                </div>
-              </div>
-            </li>
-            <li class="additional-list__item sheet">
-              <p class="additional-list__description">
-                <img
-                  src="img/sauce.svg"
-                  width="39"
-                  height="60"
-                  alt="Острый соус"
-                />
-                <span>Острый соус</span>
-              </p>
-
-              <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="counter__button counter__button--plus counter__button--orange"
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
-
-                <div class="additional-list__price">
-                  <b>× 30 ₽</b>
-                </div>
-              </div>
-            </li>
-            <li class="additional-list__item sheet">
-              <p class="additional-list__description">
-                <img
-                  src="img/potato.svg"
-                  width="39"
-                  height="60"
-                  alt="Картошка из печи"
-                />
-                <span>Картошка из печи</span>
-              </p>
-
-              <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="counter__button counter__button--plus counter__button--orange"
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
-
-                <div class="additional-list__price">
-                  <b>× 56 ₽</b>
-                </div>
-              </div>
-            </li>
+            <CartMisc
+              v-for="item in misc"
+              :key="item.id"
+              :id="item.id"
+              :name="item.name"
+              :image="item.image"
+              :price="item.price"
+              :count="item.count"
+            />
           </ul>
         </div>
 
         <div class="cart__form">
-          <div class="cart-form">
-            <label class="cart-form__select">
-              <span class="cart-form__label">Получение заказа:</span>
-
-              <select name="test" class="select">
-                <option value="1">Заберу сам</option>
-                <option value="2">Новый адрес</option>
-                <option value="3">Дом</option>
-              </select>
-            </label>
-
-            <label class="input input--big-label">
-              <span>Контактный телефон:</span>
-              <input type="text" name="tel" placeholder="+7 999-999-99-99" />
-            </label>
-
-            <div class="cart-form__address">
-              <span class="cart-form__label">Новый адрес:</span>
-
-              <div class="cart-form__input">
-                <label class="input">
-                  <span>Улица*</span>
-                  <input type="text" name="street" />
-                </label>
-              </div>
-
-              <div class="cart-form__input cart-form__input--small">
-                <label class="input">
-                  <span>Дом*</span>
-                  <input type="text" name="house" />
-                </label>
-              </div>
-
-              <div class="cart-form__input cart-form__input--small">
-                <label class="input">
-                  <span>Квартира</span>
-                  <input type="text" name="apartment" />
-                </label>
-              </div>
-            </div>
-          </div>
+          <CartAddressForm
+            :addressIndex.sync="addressIndex"
+            @input="input"
+            @infoChange="isDisabled = $event"
+          />
         </div>
       </div>
       <router-view @log-in="$emit('log-in', $event)" />
     </main>
     <section class="footer">
       <div class="footer__more">
-        <a href="#" class="button button--border button--arrow"
-          >Хочу еще одну</a
-        >
+        <router-link
+          :to="{ name: 'Index' }"
+          class="button button--border button--arrow"
+          >Хочу еще одну
+        </router-link>
       </div>
       <p class="footer__text">
         Перейти к конструктору<br />чтоб собрать ещё одну пиццу
       </p>
       <div class="footer__price">
-        <b>Итого: 2 228 ₽</b>
+        <b>Итого: {{ getCartPrice }} ₽</b>
       </div>
 
       <div class="footer__submit">
-        <button type="submit" class="button">Оформить заказ</button>
+        <button
+          :disabled="isDisabled"
+          type="submit"
+          class="button"
+          @click.prevent="order"
+        >
+          Оформить заказ
+        </button>
       </div>
     </section>
   </form>
 </template>
 
 <script>
+import CartPizza from "@/modules/Cart/CartPizza";
+import CartMisc from "@/modules/Cart/CartMisc";
+import CartAddressForm from "@/modules/Cart/CartAddressForm";
+import validator from "@/common/mixins/validator";
+import { mapGetters, mapState } from "vuex";
+
 export default {
   name: "Cart",
+
+  components: {
+    CartPizza,
+    CartMisc,
+    CartAddressForm,
+  },
+
+  data() {
+    return {
+      addressInfo: {},
+      addressIndex: 0,
+      isDisabled: true,
+      validations: {
+        tel: {
+          error: "",
+          rules: ["tel"],
+        },
+        street: {
+          error: "",
+          rules: ["required"],
+        },
+        apartment: {
+          error: "",
+          rules: ["required"],
+        },
+        house: {
+          error: "",
+          rules: ["required"],
+        },
+      },
+    };
+  },
+
+  mixins: [validator],
+
+  computed: {
+    ...mapState("Cart", ["pizza", "misc"]),
+    ...mapGetters("Cart", ["getCartPrice"]),
+  },
+
+  methods: {
+    input(evt) {
+      this.addressInfo = evt.selectedAddress;
+    },
+
+    order() {
+      let isValid = false;
+
+      if (this.addressIndex === 0) {
+        isValid = this.$validateFields(
+          { tel: this.addressInfo.tel },
+          { tel: this.validations.tel }
+        );
+      } else {
+        isValid = this.$validateFields(this.addressInfo, this.validations);
+      }
+
+      if (isValid) {
+        this.$store.dispatch("Orders/addOrder");
+        this.$store.dispatch("Cart/clearCart");
+        this.$router.push({ name: "Success" });
+      } else {
+        Object.keys(this.validations).forEach((key) => {
+          console.log(this.validations[key].error);
+        });
+      }
+    },
+  },
 };
 </script>

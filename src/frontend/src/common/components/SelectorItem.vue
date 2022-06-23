@@ -1,12 +1,12 @@
 <template>
   <label :class="`${name}__input ${name}__input--${value}`">
     <input
-      type="radio"
       :name="name"
       :value="value"
       :checked="isSelected"
+      type="radio"
       class="visually-hidden"
-      @input="$emit('selectorChange', $event.target.value)"
+      @input="$emit('selectorChange', $event)"
     />
     <b v-if="name === 'dough'">{{ item.name }}</b>
     <span v-else>{{ item.name }}</span>

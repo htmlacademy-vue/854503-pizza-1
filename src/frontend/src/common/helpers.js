@@ -44,6 +44,7 @@ export const makeIngredientsList = (ingredients) => {
     list[item.id] = {
       ingredientName: item.ingredientName,
       count: 0,
+      name: item.name,
     };
   }
 
@@ -53,16 +54,28 @@ export const makeIngredientsList = (ingredients) => {
 export const getDefaultPizza = (pizza) => {
   return {
     size: {
-      value: sizeNameToValue.get(pizza.sizes[0].name).value,
+      value: sizeNameToValue.get(pizza.sizes[0].name),
       multiplier: pizza.sizes[0].multiplier,
+      id: pizza.sizes[0].id,
+      name: pizza.sizes[0].name,
     },
     sauce: {
       value: sauceNameToValue.get(pizza.sauces[0].name),
       price: pizza.sauces[0].price,
+      id: pizza.sauces[0].id,
+      name: pizza.sauces[0].name,
     },
     dough: {
       value: doughNameToValue.get(pizza.dough[0].name),
       price: pizza.dough[0].price,
+      id: pizza.dough[0].id,
     },
   };
+};
+
+export const capitalize = (text) =>
+  `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
+
+export const miscFromServerAdapter = (misc) => {
+  return { ...misc, count: 0 };
 };

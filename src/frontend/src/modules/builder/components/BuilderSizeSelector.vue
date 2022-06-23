@@ -5,13 +5,13 @@
 
       <div class="sheet__content diameter">
         <SelectorItem
-          v-for="item in sizes"
+          v-for="item in jsonPizza.sizes"
           :key="item.id"
           :item="item"
           :value="sizeNameToValue.get(item.name)"
-          :isSelected="selectedSize.value === sizeNameToValue.get(item.name)"
+          :isSelected="foundation.size.id === item.id"
+          storeAction="Builder/sizeChange"
           name="diameter"
-          @selectorChange="$emit('sizeChange', { value: $event, id: item.id })"
         />
       </div>
     </div>
@@ -21,20 +21,10 @@
 <script>
 import SelectorItem from "@/common/components/SelectorItem";
 import { sizeNameToValue } from "@/common/enums";
+import { mapState } from "vuex";
 
 export default {
   name: "BuilderSizeSelector",
-
-  props: {
-    sizes: {
-      type: Array,
-      required: true,
-    },
-    selectedSize: {
-      type: Object,
-      required: true,
-    },
-  },
 
   data() {
     return {
@@ -45,6 +35,9 @@ export default {
   components: {
     SelectorItem,
   },
+
+  computed: {
+    ...mapState("Builder", ["foundation", "jsonPizza"]),
+  },
 };
 </script>
-<style lang="sss" scoped></style>

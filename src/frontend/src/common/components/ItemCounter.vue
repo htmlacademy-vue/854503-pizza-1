@@ -1,88 +1,75 @@
 <template>
-  <li class="ingredients__item">
-    <AppDrop @drop="$emit('drop', $event)">
-      <AppDrag :transferData="item" :isDraggable="isDraggable">
-        <span class="filling" :class="`filling--${item.ingredientName}`">
-          {{ item.name }}
-        </span>
-
-        <div class="counter counter--orange ingredients__counter">
-          <button
-            type="button"
-            class="counter__button counter__button--minus"
-            :disabled="count === MIN_INGREDIENTS"
-            @click="countChange(count - 1)"
-          >
-            <span class="visually-hidden">Меньше</span>
-          </button>
-          <input
-            type="text"
-            name="counter"
-            class="counter__input"
-            :value="count"
-            @change="countChange($event.target.value)"
-          />
-          <button
-            type="button"
-            class="counter__button counter__button--plus"
-            :disabled="count >= MAX_INGREDIENTS"
-            @click="countChange(count + 1)"
-          >
-            <span class="visually-hidden">Больше</span>
-          </button>
-        </div>
-      </AppDrag>
-    </AppDrop>
-  </li>
+  <div :class="`counter ${block}__counter`">
+    <button
+      :disabled="count === MIN_VALUE"
+      type="button"
+      class="counter__button counter__button--minus"
+      @click="countChange(count - 1)"
+    >
+      <span class="visually-hidden">Меньше</span>
+    </button>
+    <input
+      :value="count"
+      type="text"
+      name="counter"
+      class="counter__input"
+      @change="countChange($event.target.value)"
+    />
+    <button
+      :class="[
+        'counter__button',
+        'counter__button--plus',
+        color ? `counter__button--${color}` : '',
+      ]"
+      :disabled="!maxValue ? false : count >= maxValue"
+      type="button"
+      @click="countChange(count + 1)"
+    >
+      <span class="visually-hidden">Больше</span>
+    </button>
+  </div>
 </template>
 
 <script>
-import { MAX_INGREDIENTS, MIN_INGREDIENTS } from "../const";
-import AppDrag from "./AppDrag";
-import AppDrop from "./AppDrop";
+import { MIN_VALUE } from "../const";
 
 export default {
   name: "ItemCounter",
 
-  components: {
-    AppDrag,
-    AppDrop,
-  },
-
   props: {
-    item: {
-      type: Object,
+    color: {
+      type: String,
+      required: false,
+    },
+    id: {
+      type: Number,
+      default: null,
+    },
+    name: {
+      type: String,
+      default: "",
+    },
+    block: {
+      type: String,
       required: true,
     },
     count: {
       type: Number,
-      required: true,
+      default: 0,
     },
-    isDraggable: {
-      type: Boolean,
-      required: true,
+    maxValue: {
+      type: Number,
+      default: null,
     },
   },
-
   data() {
     return {
-      MAX_INGREDIENTS,
-      MIN_INGREDIENTS,
+      MIN_VALUE,
     };
   },
-
   methods: {
     countChange(value) {
-      let currentCount = Number.parseInt(value, 10);
-
-      if (currentCount < MIN_INGREDIENTS || Number.isNaN(currentCount)) {
-        currentCount = 0;
-      }
-      if (currentCount > MAX_INGREDIENTS) {
-        currentCount = MAX_INGREDIENTS;
-      }
-
-      this.$emit("countChange", currentCount);
+      this.$emit("countChange", Number.parseInt(value, 10));
     },
   },
 };

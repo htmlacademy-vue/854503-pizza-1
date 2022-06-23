@@ -17,7 +17,7 @@ export default {
 
   props: {
     transferData: {
-      type: Object,
+      type: Number,
       required: true,
     },
     isDraggable: {

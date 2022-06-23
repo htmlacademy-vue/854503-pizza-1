@@ -5,6 +5,7 @@ export const routes = [
     component: () => import("../views/Index"),
     children: [
       {
+        name: "IndexLogin",
         path: "login",
         component: () => import("../views/Login"),
       },
@@ -16,10 +17,12 @@ export const routes = [
     component: () => import("../views/Cart"),
     children: [
       {
+        name: "CartLogin",
         path: "login",
         component: () => import("../views/Login"),
       },
       {
+        name: "Success",
         path: "success",
         component: () => import("../views/Popup"),
       },

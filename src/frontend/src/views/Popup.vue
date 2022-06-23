@@ -1,23 +1,36 @@
 <template>
   <div class="fogging">
     <div class="popup">
-      <a href="#" class="close">
+      <router-link :to="redirectPath" class="close">
         <span class="visually-hidden">Закрыть попап</span>
-      </a>
+      </router-link>
       <div class="popup__title">
         <h2 class="title">Спасибо за заказ</h2>
       </div>
       <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
       <div class="popup__button">
-        <a href="#" class="button">Отлично, я жду!</a>
+        <router-link :to="redirectPath" class="button"
+          >Отлично, я жду!</router-link
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Popup",
+
+  computed: {
+    ...mapState("Auth", ["user"]),
+
+    redirectPath() {
+      const name = this.user ? "Orders" : "Index";
+
+      return { name };
+    },
+  },
 };
 </script>
 

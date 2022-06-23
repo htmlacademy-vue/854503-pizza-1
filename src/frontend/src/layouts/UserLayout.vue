@@ -2,7 +2,7 @@
   <div class="user-layout">
     <main class="layout">
       <div class="layout__sidebar sidebar">
-        <router-link to="/" class="logo layout__logo">
+        <router-link :to="{ name: 'Index' }" class="logo layout__logo">
           <img
             src="img/logo.svg"
             alt="V!U!E! Pizza logo"
@@ -12,33 +12,30 @@
         </router-link>
 
         <router-link
+          :to="{
+            name: 'Orders',
+          }"
           active-class="layout__link--active"
           class="layout__link"
-          to="/orders"
           >История заказов</router-link
         >
         <router-link
+          :to="{
+            name: 'Profile',
+          }"
           active-class="layout__link--active"
           class="layout__link"
-          to="/profile"
           >Мои данные</router-link
         >
       </div>
-      <EventListener @add-to-cart="$emit('add-to-cart', $event)">
-        <slot />
-      </EventListener>
+      <slot />
     </main>
   </div>
 </template>
 
 <script>
-import EventListener from "../common/components/EventListener.vue";
-
 export default {
   name: "UserLayout",
-  components: {
-    EventListener,
-  },
 };
 </script>
 

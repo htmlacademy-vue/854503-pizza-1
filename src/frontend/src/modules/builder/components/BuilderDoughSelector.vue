@@ -4,13 +4,15 @@
       <h2 class="title title--small sheet__title">Выберите тесто</h2>
       <div class="sheet__content dough">
         <SelectorItem
-          v-for="item in dough"
+          v-for="item in jsonPizza.dough"
           :key="item.id"
           :item="item"
           :value="doughNameToValue.get(item.name)"
-          :isSelected="selectedDough === doughNameToValue.get(item.name)"
+          :isSelected="foundation.dough.id === item.id"
           name="dough"
-          @selectorChange="$emit('doughChange', { value: $event, id: item.id })"
+          @selectorChange="
+            selectorChange({ id: item.id, value: $event.target.value })
+          "
         />
       </div>
     </div>
@@ -20,9 +22,14 @@
 <script>
 import SelectorItem from "@/common/components/SelectorItem.vue";
 import { doughNameToValue } from "@/common/enums";
+import { mapState } from "vuex";
 
 export default {
   name: "BuilderDoughSelector",
+
+  components: {
+    SelectorItem,
+  },
 
   data() {
     return {
@@ -30,19 +37,17 @@ export default {
     };
   },
 
-  props: {
-    dough: {
-      type: Array,
-      required: true,
-    },
-    selectedDough: {
-      type: String,
-      required: true,
-    },
+  computed: {
+    ...mapState("Builder", ["foundation", "jsonPizza"]),
   },
 
-  components: {
-    SelectorItem,
+  methods: {
+    selectorChange({ id, value }) {
+      this.$store.dispatch("Builder/doughChange", {
+        id,
+        value,
+      });
+    },
   },
 };
 </script>

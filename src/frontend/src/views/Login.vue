@@ -56,7 +56,6 @@ export default {
 
   methods: {
     submitData() {
-      console.log(this.$route, this.$router);
       if (this.email && this.pass) {
         this.$emit("log-in", { email: this.email, pass: this.pass });
         this.$router.back();

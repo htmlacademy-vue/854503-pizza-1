@@ -1,45 +1,24 @@
 <template>
   <div id="app">
-    <AppHeader :userData="userData" :pizza="pizza" :price="price" />
-    <component
-      :is="layout"
-      @add-to-cart="
-        price = $event.price;
-        pizza = $event.pizza;
-      "
-      :userData="userData"
-    >
-      <router-view @log-in="userData = $event" />
-    </component>
+    <AppLayout />
   </div>
 </template>
 
 <script>
 import AppLayout from "./layouts/AppLayout";
-import UserLayout from "./layouts/UserLayout";
-import AppHeader from "./common/components/AppHeader.vue";
-import { DEFAULT_LAYOUT } from "./common/const";
+import { mapState } from "vuex";
+
 export default {
   name: "App",
 
   components: {
     AppLayout,
-    UserLayout,
-    AppHeader,
   },
 
-  data() {
-    return {
-      userData: null,
-      price: 0,
-      pizza: {},
-    };
-  },
+  computed: mapState(["notifications"]),
 
-  computed: {
-    layout() {
-      return this.$route.meta.layout || DEFAULT_LAYOUT;
-    },
+  created() {
+    this.$store.dispatch("init");
   },
 };
 </script>

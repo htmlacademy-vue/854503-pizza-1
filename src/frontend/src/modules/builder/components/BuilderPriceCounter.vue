@@ -2,10 +2,10 @@
   <div class="content__result">
     <p>Итого: {{ price }} ₽</p>
     <button
+      :disabled="isDisabled"
       type="button"
       class="button"
-      :disabled="isDisabled"
-      @click="$emit('addToCart')"
+      @click="addToCart"
     >
       Готовьте!
     </button>
@@ -13,17 +13,31 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "BuilderPriceCounter",
 
-  props: {
-    price: {
-      type: Number,
-      default: 0,
+  computed: {
+    ...mapState("Builder", ["ingredients", "name", "price"]),
+
+    isDisabled() {
+      const ingredients = this.ingredients;
+      let isAnyAdded = true;
+
+      for (let ingredient in ingredients) {
+        if (ingredients[ingredient].count > 0) {
+          isAnyAdded = this.name ? false : true;
+          break;
+        }
+      }
+      return isAnyAdded;
     },
-    isDisabled: {
-      type: Boolean,
-      default: true,
+  },
+
+  methods: {
+    addToCart() {
+      this.$store.dispatch("Cart/addPizzaToCart");
     },
   },
 };
